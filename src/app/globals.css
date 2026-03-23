@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+:root {
+  /* Blueprint color scheme */
+  --color-primary: #3b82f6;
+  --color-accent: #60a5fa;
+  --color-bg: #080c14;
+  --color-bg-light: #0f1520;
+  --color-grid: #1e3a5f;
+  --color-text: #e2e8f0;
+  --color-text-muted: #64748b;
+  --color-line: rgba(59, 130, 246, 0.15);
+}
+
+@theme inline {
+  --color-primary: var(--color-primary);
+  --color-accent: var(--color-accent);
+  --color-bg: var(--color-bg);
+  --color-bg-light: var(--color-bg-light);
+  --color-grid: var(--color-grid);
+  --color-text: var(--color-text);
+  --color-text-muted: var(--color-text-muted);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+/* Lenis smooth scroll */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-grid);
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
+
+/* Base styles */
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  overflow-x: hidden;
+}
+
+/* Selection */
+::selection {
+  background: var(--color-primary);
+  color: var(--color-text);
+}
