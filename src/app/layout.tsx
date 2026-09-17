@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import ThemeProvider from "@/components/layout/ThemeProvider";
+import { PROFILE } from "@/content/profile";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -18,6 +19,9 @@ const SITE_DESCRIPTION =
   "사용자가 머무르고 싶은 화면을 만드는 프론트엔드 개발자 탁윤호의 포트폴리오입니다.";
 
 export const metadata: Metadata = {
+  // 이 값이 없으면 og:image 같은 상대 경로가 절대 주소로 풀리지 않아서 링크 미리보기에 이미지가 나오지 않는다
+  metadataBase: new URL(PROFILE.siteUrl),
+  alternates: { canonical: "/" },
   title: SITE_TITLE,
   description: SITE_DESCRIPTION,
   keywords: [
@@ -32,6 +36,8 @@ export const metadata: Metadata = {
   openGraph: {
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
+    url: "/",
+    siteName: "yunho.dev",
     type: "website",
     locale: "ko_KR",
   },
