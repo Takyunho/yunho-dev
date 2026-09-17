@@ -1,27 +1,35 @@
 @import "tailwindcss";
+@import "pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css";
 
 :root {
-  /* Blueprint color scheme */
-  --color-primary: #3b82f6;
-  --color-accent: #60a5fa;
-  --color-bg: #080c14;
-  --color-bg-light: #0f1520;
-  --color-grid: #1e3a5f;
-  --color-text: #e2e8f0;
-  --color-text-muted: #64748b;
-  --color-line: rgba(59, 130, 246, 0.15);
+  --bg: #f0f1f5;
+  --surface: #ffffff;
+  --fg: #0d0e12;
+  --muted: #5b6070;
+  --accent: #1a2ffb;
+  --line: rgba(13, 14, 18, 0.12);
+}
+
+[data-theme="dark"] {
+  --bg: #0a0b0f;
+  --surface: #12141a;
+  --fg: #eceef3;
+  --muted: #8a90a2;
+  --accent: #5b6cff;
+  --line: rgba(236, 238, 243, 0.14);
 }
 
 @theme inline {
-  --color-primary: var(--color-primary);
-  --color-accent: var(--color-accent);
-  --color-bg: var(--color-bg);
-  --color-bg-light: var(--color-bg-light);
-  --color-grid: var(--color-grid);
-  --color-text: var(--color-text);
-  --color-text-muted: var(--color-text-muted);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-line: var(--line);
+  --font-sans:
+    var(--font-geist-sans), "Pretendard Variable", Pretendard, system-ui,
+    sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
 /* Lenis smooth scroll */
@@ -42,33 +50,38 @@ html.lenis body {
   overflow: hidden;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 4px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--color-bg);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--color-grid);
-  border-radius: 2px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-primary);
-}
-
-/* Base styles */
 body {
-  background: var(--color-bg);
-  color: var(--color-text);
+  background-color: var(--bg);
+  color: var(--fg);
   overflow-x: hidden;
+  /* 한글이 단어 중간에서 줄바꿈되지 않게 한다 */
+  word-break: keep-all;
+  transition:
+    background-color 0.6s ease,
+    color 0.6s ease;
 }
 
-/* Selection */
 ::selection {
-  background: var(--color-primary);
-  color: var(--color-text);
+  background: var(--accent);
+  color: #ffffff;
+}
+
+/* 제목을 줄 단위로 가렸다가 아래에서 밀어 올리는 마스크 */
+.line-mask {
+  display: block;
+  overflow: hidden;
+  /* 줄 높이가 글자보다 낮아서 g 같은 글자의 아래쪽이 마스크에 잘린다. 잘리는 만큼 영역을 늘리고 같은 만큼 당긴다 */
+  padding-bottom: 0.15em;
+  margin-bottom: -0.15em;
+}
+
+.line-mask > span {
+  display: block;
+  transform: translateY(110%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .line-mask > span {
+    transform: none;
+  }
 }
