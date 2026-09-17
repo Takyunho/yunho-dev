@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** `yunho-dev`를 라이트와 다크 테마를 지원하는 lusion 스타일의 3D 인터랙티브 단일 페이지 포트폴리오로 전면 개편한다.
+**Goal:** `yunho-dev`를 라이트와 다크 테마를 지원하는 3D 인터랙티브 단일 페이지 포트폴리오로 전면 개편한다.
 
 **Architecture:** 화면 뒤에 고정된 투명 R3F `Canvas` 하나가 있고, 그 위에서 서버 렌더링된 DOM 섹션이 Lenis로 스크롤된다. DOM 쪽이 렌더링을 일으키지 않는 가변 객체 `sceneState`에 스크롤 진행도, 포인터, accent 색을 쓰면 3D 쪽이 `useFrame`에서 읽어서 물리 오브젝트의 끌개, 카메라, 재질색을 보간한다.
 
@@ -36,7 +36,7 @@
 
 - Produces: Tailwind 색 유틸리티 `bg-bg`, `bg-surface`, `text-fg`, `text-muted`, `text-accent`, `border-line`. `useMediaQuery(query: string): boolean`, `useReducedMotion(): boolean`. `<ThemeProvider>`.
 
-- [ ] **Step 1:** `git switch -c feat/lusion-style-renewal`
+- [ ] **Step 1:** `develop`에서 작업 브랜치를 새로 만든다.
 - [ ] **Step 2:** `pnpm remove framer-motion && pnpm add @react-three/rapier next-themes pretendard`
 - [ ] **Step 3:** 위 Delete 목록을 삭제한다.
 - [ ] **Step 4:** `next.config.ts`에서 쓰이지 않게 된 glb webpack 규칙을 제거하고 `transpilePackages: ["three"]`만 남긴다. `next dev --turbopack`에서 webpack 설정은 경고만 낸다.
