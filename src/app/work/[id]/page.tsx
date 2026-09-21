@@ -68,9 +68,12 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             { "--project-accent": project.accentColor } as React.CSSProperties
           }
         >
-          <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-            <p className="label tabular-nums">{project.period}</p>
-            <p className="label text-(--project-accent)">{category.label}</p>
+          {/* 목록 카드와 같은 표기를 쓴다. 기간은 모노, 분류는 테두리 칩이다 */}
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+            <p className="label font-mono tabular-nums">{project.period}</p>
+            <p className="label rounded-full border border-line bg-surface px-2 py-1 whitespace-nowrap">
+              {category.label}
+            </p>
           </div>
 
           <h1 className="display mt-4 text-[clamp(2.5rem,7vw,4.5rem)] leading-[1.05] text-fg">
@@ -86,7 +89,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             {project.techStack.map((technology) => (
               <li
                 key={technology}
-                className="text-(length:--text-label) text-fg"
+                className="font-mono text-(length:--text-label) text-muted"
               >
                 {technology}
               </li>

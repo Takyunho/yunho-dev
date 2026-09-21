@@ -1,6 +1,6 @@
 /* Hallmark · genre: editorial · macrostructure: Long Document · theme: custom-tuned (cobalt on cool paper) · enrichment: existing 3D scene · nav: N9 · footer: Ft2
  * audience: 채용 담당자, 개발 팀 리더, 개발자 · use: 커리어와 프로젝트 확인 · tone: editorial + technical, 가독성 우선
- * display: Instrument Serif · body: Geist + Pretendard · outlier: Geist Mono (기간과 연도 같은 데이터에만)
+ * display: Instrument Serif · body: Geist + Pretendard · outlier: Geist Mono (기간, 연도, 기술명처럼 본문이 아닌 데이터에만)
  * pre-emit critique: P4 H4 E4 S4 R5 V4
  */
 :root {
