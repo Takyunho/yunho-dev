@@ -40,17 +40,8 @@ export default function ProjectGridCard({
 
       <h3 className="mt-3 text-lg leading-snug font-semibold tracking-tight text-fg transition-colors duration-(--dur-short) group-hover:text-(--project-accent)">
         {detailHref ? (
-          <Link
-            href={detailHref}
-            className="inline-flex items-baseline gap-1.5"
-          >
+          <Link href={detailHref} className="hover:underline">
             {project.title}
-            <span
-              aria-hidden="true"
-              className="text-sm transition-transform duration-(--dur-short) group-hover:translate-x-1"
-            >
-              →
-            </span>
           </Link>
         ) : (
           project.title
@@ -63,13 +54,38 @@ export default function ProjectGridCard({
         {project.summary}
       </p>
 
-      <ul className="mt-auto flex flex-wrap gap-x-3 gap-y-1 pt-4">
-        {project.techStack.slice(0, 3).map((technology) => (
-          <li key={technology} className="text-(length:--text-label) text-fg">
-            {technology}
-          </li>
-        ))}
-      </ul>
+      <div className="mt-auto flex items-end justify-between gap-4 pt-4">
+        <ul className="flex flex-wrap gap-x-3 gap-y-1">
+          {project.techStack.slice(0, 3).map((technology) => (
+            <li key={technology} className="text-(length:--text-label) text-fg">
+              {technology}
+            </li>
+          ))}
+        </ul>
+
+        {/* 상세로 들어가는 자리다. 칸 오른쪽 끝에 두어 카드마다 같은 위치에서 찾을 수 있게 한다 */}
+        {detailHref && (
+          <Link
+            href={detailHref}
+            aria-label={`${project.title} 자세히 보기`}
+            className="flex size-9 shrink-0 items-center justify-center rounded-full border border-line text-fg transition-colors duration-(--dur-short) group-hover:border-(--project-accent) group-hover:text-(--project-accent)"
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </Link>
+        )}
+      </div>
     </article>
   );
 }

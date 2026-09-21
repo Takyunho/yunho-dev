@@ -32,7 +32,7 @@ export default function ProjectCard({
       onPointerLeave={clearAccent}
       onFocus={applyAccent}
       onBlur={clearAccent}
-      className="group grid grid-cols-1 gap-x-8 gap-y-3 border-t border-line py-7 md:grid-cols-[16rem_1fr] md:py-8"
+      className="group grid grid-cols-1 gap-x-8 gap-y-3 border-t border-line py-7 md:grid-cols-[16rem_1fr_auto] md:py-8"
       style={
         { "--project-accent": category.accentColor } as React.CSSProperties
       }
@@ -48,14 +48,8 @@ export default function ProjectCard({
       <div>
         <h3 className={titleClassName}>
           {detailHref ? (
-            <Link href={detailHref} className="inline-flex items-baseline gap-2">
+            <Link href={detailHref} className="hover:underline">
               {project.title}
-              <span
-                aria-hidden="true"
-                className="text-base transition-transform duration-(--dur-short) group-hover:translate-x-1"
-              >
-                →
-              </span>
             </Link>
           ) : (
             project.title
@@ -79,20 +73,41 @@ export default function ProjectCard({
             ))}
           </ul>
 
-          {project.links.length > 0 && (
-            <div className="flex flex-wrap gap-x-6 gap-y-2">
-              {project.links.map((projectLink) => (
-                <ExternalLink
-                  key={projectLink.url}
-                  href={projectLink.url}
-                  label={projectLink.label}
-                  className="text-link text-(length:--text-label) font-medium whitespace-nowrap text-fg"
-                />
-              ))}
-            </div>
-          )}
+          <div className="flex flex-wrap items-baseline gap-x-6 gap-y-2">
+            {project.links.map((projectLink) => (
+              <ExternalLink
+                key={projectLink.url}
+                href={projectLink.url}
+                label={projectLink.label}
+                className="text-link text-(length:--text-label) font-medium whitespace-nowrap text-fg"
+              />
+            ))}
+          </div>
         </div>
       </div>
+
+      {/* 상세로 들어가는 자리다. 카드 어느 곳을 가리켜도 보이도록 오른쪽 끝에 따로 둔다 */}
+      {detailHref && (
+        <Link
+          href={detailHref}
+          aria-label={`${project.title} 자세히 보기`}
+          className="flex size-10 shrink-0 items-center justify-center justify-self-end rounded-full border border-line text-fg transition-colors duration-(--dur-short) group-hover:border-(--project-accent) group-hover:text-(--project-accent) md:self-center"
+        >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+        </Link>
+      )}
     </article>
   );
 }
