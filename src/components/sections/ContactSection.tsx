@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Link from "next/link";
 import ExternalLink from "@/components/layout/ExternalLink";
 import { useRevealOnScroll } from "@/hooks/useRevealOnScroll";
 import { PROFILE } from "@/content/profile";
@@ -62,8 +63,8 @@ export default function ContactSection() {
             {PROFILE.nameEnglish}
           </p>
           {/* 헤더의 유리 알약과 같은 재질로 두어 화면 위아래가 같은 언어로 읽히게 한다 */}
-          <a
-            href="#hero"
+          <Link
+            href="/#hero"
             aria-label="맨 위로"
             className="liquid-glass group relative flex size-10 shrink-0 items-center justify-center rounded-full text-fg transition-colors duration-(--dur-short) hover:text-accent"
           >
@@ -81,7 +82,7 @@ export default function ContactSection() {
             >
               <path d="M12 19V5M5 12l7-7 7 7" />
             </svg>
-          </a>
+          </Link>
         </div>
       </footer>
     </section>
