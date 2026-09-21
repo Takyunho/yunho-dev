@@ -14,7 +14,7 @@ export default function WorkSection() {
     <section
       id="work"
       ref={sectionRef}
-      className="mx-auto max-w-6xl px-5 py-24 md:px-10 md:py-32"
+      className="mx-auto flex min-h-svh max-w-6xl flex-col justify-center px-5 py-24 md:px-10 md:py-32"
     >
       <SectionHeading title="Work" caption="프로젝트" />
 

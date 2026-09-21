@@ -13,7 +13,7 @@ export default function LabSection() {
     <section
       id="lab"
       ref={sectionRef}
-      className="mx-auto max-w-6xl px-5 py-24 md:px-10 md:py-32"
+      className="mx-auto flex min-h-svh max-w-6xl flex-col justify-center px-5 py-24 md:px-10 md:py-32"
     >
       <SectionHeading title="Lab" caption="실험과 학습" />
 
