@@ -18,10 +18,10 @@ import {
 const ALL_FILTER = "all";
 type FilterId = typeof ALL_FILTER | ProjectCategoryId;
 
-// 한 면에 담는 개수. 그리드에서는 2×2가 된다
-const PROJECTS_PER_PAGE = 4;
-
 type ViewMode = "list" | "grid";
+
+// 한 면에 담는 개수. 리스트는 한 줄이 길어서 적게, 그리드는 3×3으로 들어간다
+const PROJECTS_PER_PAGE: Record<ViewMode, number> = { list: 4, grid: 9 };
 
 const VIEW_MODES: { id: ViewMode; label: string }[] = [
   { id: "list", label: "리스트" },
@@ -70,18 +70,17 @@ export default function WorkSection() {
       selectedFilter === ALL_FILTER
         ? PROJECTS
         : PROJECTS.filter((project) => project.categoryId === selectedFilter);
+    const pageSize = PROJECTS_PER_PAGE[viewMode];
     const grouped: Project[][] = [];
     for (
       let startIndex = 0;
       startIndex < visibleProjects.length;
-      startIndex += PROJECTS_PER_PAGE
+      startIndex += pageSize
     ) {
-      grouped.push(
-        visibleProjects.slice(startIndex, startIndex + PROJECTS_PER_PAGE),
-      );
+      grouped.push(visibleProjects.slice(startIndex, startIndex + pageSize));
     }
     return grouped;
-  }, [selectedFilter]);
+  }, [selectedFilter, viewMode]);
 
   useEffect(() => {
     if (!emblaApi) return;
@@ -169,7 +168,7 @@ export default function WorkSection() {
           </div>
         </div>
 
-        {/* 끌어서 넘기는 영역이다. 면 하나에 PROJECTS_PER_PAGE만큼 들어간다 */}
+        {/* 끌어서 넘기는 영역이다. 면 하나에 보기 방식별 개수만큼 들어간다 */}
         <div className="mt-8 overflow-hidden" ref={emblaRef}>
           <div className="flex">
             {pages.map((pageProjects, currentPageIndex) => (
@@ -178,7 +177,7 @@ export default function WorkSection() {
                 aria-label={`${currentPageIndex + 1} / ${pages.length} 페이지`}
                 className={`min-w-0 shrink-0 grow-0 basis-full border-b border-line ${
                   viewMode === "grid"
-                    ? "grid grid-cols-1 gap-x-8 gap-y-6 pb-8 sm:grid-cols-2"
+                    ? "grid grid-cols-1 gap-x-8 gap-y-6 pb-8 sm:grid-cols-2 lg:grid-cols-3"
                     : ""
                 }`}
               >
