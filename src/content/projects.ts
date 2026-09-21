@@ -87,7 +87,7 @@ const PROJECT_SEEDS: ProjectSeed[] = [
     role: "컴포넌트 개발과 문서화",
     summary:
       "여러 제품이 함께 쓰는 React 컴포넌트 라이브러리입니다. Select와 Dropdown, Modal 같은 피드백 계열을 주로 맡았고 접근성과 문서를 함께 손봤습니다.",
-    techStack: ["React", "TypeScript", "Vite", "디자인 토큰 CSS"],
+    techStack: ["React", "TypeScript", "Vite", "Design Tokens"],
     links: [],
   },
   {
