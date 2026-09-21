@@ -131,14 +131,15 @@ export default function WorkSection() {
                   type="button"
                   aria-pressed={isSelected}
                   onClick={() => setSelectedFilter(filter.id)}
-                  className={`text-(length:--text-body) whitespace-nowrap transition-colors duration-(--dur-short) ${
-                    isSelected ? "text-link text-fg" : "text-muted hover:text-fg"
+                  // 마우스를 올렸을 때만 글자와 숫자에 밑줄이 한 줄로 이어져 붙는다
+                  className={`text-(length:--text-body) whitespace-nowrap decoration-1 underline-offset-[0.3em] transition-colors duration-(--dur-short) hover:underline ${
+                    isSelected
+                      ? "font-semibold text-fg"
+                      : "text-muted hover:text-fg"
                   }`}
                 >
-                  {filter.label}
-                  <span className="label ml-1.5 tabular-nums">
-                    {filter.count}
-                  </span>
+                  {filter.label}{" "}
+                  <span className="label tabular-nums">{filter.count}</span>
                 </button>
               );
             })}
@@ -157,8 +158,8 @@ export default function WorkSection() {
                   type="button"
                   aria-pressed={isSelected}
                   onClick={() => setViewMode(mode.id)}
-                  className={`label whitespace-nowrap transition-colors duration-(--dur-short) ${
-                    isSelected ? "text-link text-fg" : "hover:text-fg"
+                  className={`label whitespace-nowrap decoration-1 underline-offset-[0.3em] transition-colors duration-(--dur-short) hover:underline ${
+                    isSelected ? "font-semibold text-fg" : "hover:text-fg"
                   }`}
                 >
                   {mode.label}
