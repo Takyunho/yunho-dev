@@ -172,8 +172,37 @@ export default function WorkSection() {
           </div>
         </div>
 
+        {/* 섹션이 화면보다 길어서 목록 아래에 두면 도착하자마자 보이지 않는다. 그래서 목록 위에 둔다 */}
+        {pageCount > 1 && (
+          <div className="mt-6 flex items-center justify-end gap-4">
+            <p className="label tabular-nums">
+              {pageIndex + 1} / {pageCount}
+            </p>
+
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                aria-label="이전 프로젝트 보기"
+                onClick={scrollPrevious}
+                disabled={pageIndex === 0}
+                className="flex size-9 items-center justify-center rounded-full border border-line text-fg transition-colors duration-(--dur-short) hover:border-accent hover:text-accent disabled:pointer-events-none disabled:opacity-35"
+              >
+                <span aria-hidden="true">←</span>
+              </button>
+              <button
+                type="button"
+                aria-label="다음 프로젝트 보기"
+                onClick={scrollNext}
+                disabled={pageIndex === pageCount - 1}
+                className="flex size-9 items-center justify-center rounded-full border border-line text-fg transition-colors duration-(--dur-short) hover:border-accent hover:text-accent disabled:pointer-events-none disabled:opacity-35"
+              >
+                <span aria-hidden="true">→</span>
+              </button>
+            </div>
+          </div>
+        )}
         {/* 끌어서 넘기는 영역이다. 면 하나에 보기 방식별 개수만큼 들어간다 */}
-        <div className="mt-8 overflow-hidden" ref={emblaRef}>
+        <div className="mt-4 overflow-hidden" ref={emblaRef}>
           <div className="flex">
             {pages.map((pageProjects, currentPageIndex) => (
               <div
@@ -208,35 +237,6 @@ export default function WorkSection() {
             ))}
           </div>
         </div>
-
-        {pageCount > 1 && (
-          <div className="mt-6 flex items-center justify-between gap-6">
-            <p className="label tabular-nums">
-              {pageIndex + 1} / {pageCount}
-            </p>
-
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                aria-label="이전 프로젝트 보기"
-                onClick={scrollPrevious}
-                disabled={pageIndex === 0}
-                className="flex size-9 items-center justify-center rounded-full border border-line text-fg transition-colors duration-(--dur-short) hover:border-accent hover:text-accent disabled:pointer-events-none disabled:opacity-35"
-              >
-                <span aria-hidden="true">←</span>
-              </button>
-              <button
-                type="button"
-                aria-label="다음 프로젝트 보기"
-                onClick={scrollNext}
-                disabled={pageIndex === pageCount - 1}
-                className="flex size-9 items-center justify-center rounded-full border border-line text-fg transition-colors duration-(--dur-short) hover:border-accent hover:text-accent disabled:pointer-events-none disabled:opacity-35"
-              >
-                <span aria-hidden="true">→</span>
-              </button>
-            </div>
-          </div>
-        )}
       </div>
     </section>
   );
