@@ -16,7 +16,11 @@ export default function ProjectGridCard({
   detailHref,
 }: ProjectGridCardProps) {
   const applyAccent = () => {
-    sceneState.accentOverride = project.accentColor;
+    // 3D 부품도 바탕에 맞는 밝기라야 배경에 묻히지 않는다. next-themes가 써 둔 값을 그대로 읽는다
+    const isDarkTheme = document.documentElement.dataset.theme === "dark";
+    sceneState.accentOverride = isDarkTheme
+      ? project.accentColor.dark
+      : project.accentColor.light;
   };
   const clearAccent = () => {
     sceneState.accentOverride = null;
@@ -28,14 +32,22 @@ export default function ProjectGridCard({
       onPointerLeave={clearAccent}
       onFocus={applyAccent}
       onBlur={clearAccent}
+      data-project-accent
       className="group flex h-full flex-col border-t border-line pt-5"
       style={
-        { "--project-accent": project.accentColor } as React.CSSProperties
+        {
+          "--project-accent-light": project.accentColor.light,
+          "--project-accent-dark": project.accentColor.dark,
+        } as React.CSSProperties
       }
     >
-      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-        <p className="label tabular-nums">{project.period}</p>
-        <p className="label text-(--project-accent)">{category.label}</p>
+      {/* 기간은 숫자라 모노로, 분류는 다섯 값 중 하나라 테두리를 둘러 서로 다른 것으로 읽히게 한다.
+          강조색은 프로젝트마다 다르므로 분류에는 쓰지 않는다 */}
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+        <p className="label font-mono tabular-nums">{project.period}</p>
+        <p className="label rounded-full border border-line bg-surface px-2 py-1 whitespace-nowrap">
+          {category.label}
+        </p>
       </div>
 
       <h3 className="mt-3 text-lg leading-snug font-semibold tracking-tight text-fg transition-colors duration-(--dur-short) group-hover:text-(--project-accent)">
@@ -50,15 +62,20 @@ export default function ProjectGridCard({
       <p className="label mt-1">{project.role}</p>
 
       {/* 칸 안의 다른 글자가 모두 라벨 크기라 설명만 한 단계 키워 먼저 읽히게 한다.
-          칸마다 높이가 들쭉날쭉하지 않게 세 줄에서 자른다 */}
-      <p className="mt-3 line-clamp-3 text-[0.9375rem] leading-relaxed text-muted">
+          줄 수를 맞춰 자르면 칸마다 길이가 달랐던 흔적이 지워져 한 틀로 찍어낸 것처럼 보인다.
+          아래쪽 스택은 mt-auto로 붙어 있어 길이가 달라도 칸 밑은 가지런하다 */}
+      <p className="mt-3 text-[0.9375rem] leading-relaxed text-muted">
         {project.summary}
       </p>
 
       <div className="mt-auto flex items-end justify-between gap-4 pt-4">
+        {/* 기술명은 고유명사라 모노로 적어 본문과 다른 목소리를 준다. 분류 칩과 겹치지 않도록 테두리는 두르지 않는다 */}
         <ul className="flex flex-wrap gap-x-3 gap-y-1">
           {project.techStack.slice(0, 3).map((technology) => (
-            <li key={technology} className="text-(length:--text-label) text-fg">
+            <li
+              key={technology}
+              className="font-mono text-(length:--text-label) text-muted"
+            >
               {technology}
             </li>
           ))}

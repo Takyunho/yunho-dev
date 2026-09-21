@@ -19,24 +19,33 @@ export const PROJECT_CATEGORIES: ProjectCategory[] = [
   { id: "demo", label: "전시와 데모" },
 ];
 
-// 색상환을 고르게 돌며 고른 색이다. 밝기와 선명도를 비슷하게 맞춰 두 테마에서 모두 읽힌다
-const ACCENT_PALETTE = [
-  "#ff7a1a", // 주황
-  "#4f7cff", // 파랑
-  "#3fbf6f", // 초록
-  "#e05fc0", // 자주
-  "#f0b429", // 노랑
-  "#28b4d8", // 하늘
-  "#a855f7", // 보라
-  "#b4d334", // 연두
-  "#f2557a", // 분홍
-  "#1fbfa8", // 청록
-  "#7c6bf0", // 남보라
-  "#ef5b4c", // 주홍
-  "#5bb890", // 풀색
-  "#c98b3a", // 황토
-  "#39c0ff", // 하늘빛
-  "#d46ef0", // 연보라
+export interface ProjectAccent {
+  // 밝은 바탕에 놓일 때 쓴다
+  light: string;
+  // 어두운 바탕에 놓일 때 쓴다
+  dark: string;
+}
+
+// 색상환을 고르게 돌며 고른 16색이다. 색상과 선명도는 두 테마가 나눠 쓰고 밝기만 다르다.
+// 한 가지 밝기로는 양쪽을 만족할 수 없다. 밝은 색을 흰 바탕에 그대로 쓰면 글자가 읽히지 않는다.
+// 각 밝기는 제 바탕에서 본문 대비 4.5:1을 넘는 선에서 가장 선명한 값으로 잡았다
+const ACCENT_PALETTE: ProjectAccent[] = [
+  { light: "#c54400", dark: "#ff7a1a" }, // 주황
+  { light: "#3b64e5", dark: "#4f7cff" }, // 파랑
+  { light: "#008135", dark: "#3fbf6f" }, // 초록
+  { light: "#b7389a", dark: "#e05fc0" }, // 자주
+  { light: "#9a6200", dark: "#f0b429" }, // 노랑
+  { light: "#007799", dark: "#28b4d8" }, // 하늘
+  { light: "#9741e3", dark: "#a855f7" }, // 보라
+  { light: "#5f7800", dark: "#b4d334" }, // 연두
+  { light: "#cb2e5b", dark: "#f2557a" }, // 분홍
+  { light: "#007c68", dark: "#1fbfa8" }, // 청록
+  { light: "#6e5bde", dark: "#7c6bf0" }, // 남보라
+  { light: "#ca382d", dark: "#ef5b4c" }, // 주홍
+  { light: "#157f5a", dark: "#5bb890" }, // 풀색
+  { light: "#9b6000", dark: "#c98b3a" }, // 황토
+  { light: "#0076b1", dark: "#39c0ff" }, // 하늘빛
+  { light: "#a842c2", dark: "#d46ef0" }, // 연보라
 ];
 
 export interface Project {
@@ -50,7 +59,7 @@ export interface Project {
   techStack: string[];
   links: ProjectLink[];
   // 카드에 마우스를 올리면 3D 오브젝트와 카드의 강조색이 이 색이 된다
-  accentColor: string;
+  accentColor: ProjectAccent;
 }
 
 type ProjectSeed = Omit<Project, "accentColor">;
@@ -87,7 +96,7 @@ const PROJECT_SEEDS: ProjectSeed[] = [
     role: "컴포넌트 개발과 문서화",
     summary:
       "여러 제품이 함께 쓰는 React 컴포넌트 라이브러리입니다. Select와 Dropdown, Modal 같은 피드백 계열을 주로 맡았고 접근성과 문서를 함께 손봤습니다.",
-    techStack: ["React", "TypeScript", "Vite", "디자인 토큰 CSS"],
+    techStack: ["React", "TypeScript", "Vite", "Design Tokens"],
     links: [],
   },
   {

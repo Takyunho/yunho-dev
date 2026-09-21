@@ -38,7 +38,7 @@ export const STACK_CATEGORIES: StackCategory[] = [
   {
     label: "UI & Styling",
     labelKorean: "UI와 스타일",
-    items: ["디자인 토큰 CSS", "Tailwind CSS", "CSS Modules", "GSAP"],
+    items: ["Design Tokens", "Tailwind CSS", "CSS Modules", "GSAP"],
   },
   {
     label: "i18n",
