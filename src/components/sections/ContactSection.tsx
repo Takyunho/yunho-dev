@@ -26,7 +26,15 @@ export default function ContactSection() {
           Let&apos;s talk
         </h2>
 
-        <div data-reveal className="mt-10 flex flex-col items-start gap-3">
+        <p
+          data-reveal
+          className="mt-8 max-w-(--measure) text-(length:--text-body) leading-relaxed text-muted md:text-lg"
+        >
+          새로운 제품을 만드는 자리나 함께 일해 볼 만한 이야기라면 언제든
+          환영합니다.
+        </p>
+
+        <div data-reveal className="mt-8 flex flex-col items-start gap-3">
           <a
             href={`mailto:${PROFILE.email}`}
             className="text-link text-2xl font-medium tracking-tight text-fg md:text-4xl"
