@@ -11,7 +11,13 @@ export default function SmoothScroll() {
   useEffect(() => {
     if (reducedMotion) return;
 
-    const lenis = new Lenis({ autoRaf: false, anchors: true });
+    // lerp가 작을수록 멈출 때까지 길게 미끄러지고, wheelMultiplier가 작을수록 휠 한 번에 덜 움직인다
+    const lenis = new Lenis({
+      autoRaf: false,
+      anchors: true,
+      lerp: 0.05,
+      wheelMultiplier: 0.7,
+    });
     lenis.on("scroll", ScrollTrigger.update);
 
     const updateLenis = (time: number) => lenis.raf(time * 1000);

@@ -18,7 +18,7 @@ export default function WorkSection() {
     >
       <SectionHeading index="03" title="Work" caption="프로젝트" />
 
-      <div className="space-y-8 md:space-y-12">
+      <div data-scene-text className="space-y-8 md:space-y-12">
         {PROJECTS.map((project, projectIndex) => (
           <ProjectCard
             key={project.id}

@@ -8,6 +8,10 @@
   --muted: #5b6070;
   --accent: #1a2ffb;
   --line: rgba(13, 14, 18, 0.12);
+  --atmosphere-a: rgba(26, 47, 251, 0.1);
+  --atmosphere-b: rgba(0, 150, 170, 0.1);
+  --atmosphere-vignette: transparent;
+  --title-shade: rgba(240, 241, 245, 0.85);
 }
 
 [data-theme="dark"] {
@@ -17,6 +21,10 @@
   --muted: #8a90a2;
   --accent: #5b6cff;
   --line: rgba(236, 238, 243, 0.14);
+  --atmosphere-a: rgba(30, 138, 150, 0.5);
+  --atmosphere-b: rgba(88, 66, 176, 0.44);
+  --atmosphere-vignette: rgba(0, 0, 0, 0.35);
+  --title-shade: rgba(10, 11, 15, 0.78);
 }
 
 @theme inline {
@@ -84,4 +92,25 @@ body {
   .line-mask > span {
     transform: none;
   }
+}
+
+/* 몽환적인 색은 셰이더가 아니라 이 안개 층이 만든다. 부품이 굳어지면 3D 쪽이 --atmosphere-opacity를 낮춘다 */
+.atmosphere {
+  opacity: var(--atmosphere-opacity, 1);
+  background:
+    radial-gradient(
+      ellipse 70% 60% at 24% 86%,
+      var(--atmosphere-a),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 60% 55% at 80% 12%,
+      var(--atmosphere-b),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 120% 90% at 50% 50%,
+      transparent 55%,
+      var(--atmosphere-vignette) 100%
+    );
 }

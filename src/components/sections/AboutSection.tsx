@@ -22,7 +22,7 @@ export default function AboutSection() {
       className="flex min-h-svh flex-col justify-center px-5 py-24 md:px-10 md:py-32"
     >
       {/* 데스크톱에서는 오른쪽 절반을 3D 덩어리 자리로 비워둔다 */}
-      <div className="md:w-1/2">
+      <div data-scene-text className="md:w-1/2">
         <SectionHeading index="01" title="About" caption="소개" />
 
         <p

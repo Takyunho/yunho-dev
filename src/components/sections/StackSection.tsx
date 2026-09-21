@@ -17,7 +17,7 @@ export default function StackSection() {
     >
       <SectionHeading index="02" title="Stack" caption="기술 스택" />
 
-      <ul className="border-b border-line">
+      <ul data-scene-text className="border-b border-line">
         {STACK_CATEGORIES.map((stackCategory) => (
           <li
             key={stackCategory.label}

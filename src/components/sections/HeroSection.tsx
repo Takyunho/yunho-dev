@@ -42,7 +42,7 @@ export default function HeroSection() {
       ref={sectionRef}
       className="flex min-h-svh flex-col justify-end px-5 pt-28 pb-10 md:px-10 md:pb-14"
     >
-      <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+      <div className="relative flex flex-col gap-8 before:absolute before:-inset-x-[8%] before:-inset-y-[18%] before:-z-10 before:rounded-[50%] before:bg-[radial-gradient(ellipse_at_50%_60%,var(--title-shade),transparent_72%)] before:content-[''] md:flex-row md:items-end md:justify-between">
         <h1 className="text-[clamp(3.5rem,12vw,11rem)] leading-[0.9] font-semibold tracking-tighter text-fg">
           {TITLE_LINES.map((titleLine) => (
             <span key={titleLine} className="line-mask">

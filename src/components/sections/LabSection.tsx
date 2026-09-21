@@ -17,7 +17,7 @@ export default function LabSection() {
     >
       <SectionHeading index="04" title="Lab" caption="실험과 학습" />
 
-      <ul className="border-b border-line">
+      <ul data-scene-text className="border-b border-line">
         {LAB_ITEMS.map((labItem) => (
           <li key={labItem.name} data-reveal className="border-t border-line">
             <a
