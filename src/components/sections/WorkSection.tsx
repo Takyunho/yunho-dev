@@ -16,9 +16,9 @@ export default function WorkSection() {
       ref={sectionRef}
       className="mx-auto max-w-6xl px-5 py-24 md:px-10 md:py-32"
     >
-      <SectionHeading index="03" title="Work" caption="프로젝트" />
+      <SectionHeading title="Work" caption="프로젝트" />
 
-      <div data-scene-text className="space-y-8 md:space-y-12">
+      <div data-scene-text className="space-y-6 border-b border-line md:space-y-10">
         {PROJECTS.map((project, projectIndex) => (
           <ProjectCard
             key={project.id}

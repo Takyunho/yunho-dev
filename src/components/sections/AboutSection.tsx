@@ -23,11 +23,11 @@ export default function AboutSection() {
     >
       {/* 데스크톱에서는 오른쪽 절반을 3D 덩어리 자리로 비워둔다 */}
       <div data-scene-text className="md:w-1/2">
-        <SectionHeading index="01" title="About" caption="소개" />
+        <SectionHeading title="About" caption="소개" />
 
         <p
           data-reveal
-          className="text-2xl leading-snug font-medium tracking-tight text-fg md:text-4xl"
+          className="text-2xl leading-snug font-medium tracking-tight text-fg md:text-[2rem] md:leading-[1.4]"
         >
           {PROFILE.introduction}
         </p>
@@ -39,10 +39,10 @@ export default function AboutSection() {
               data-reveal
               className="border-t border-line pt-5"
             >
-              <h3 className="text-base font-semibold text-fg">
+              <h3 className="text-lg font-semibold text-fg">
                 {principle.title}
               </h3>
-              <p className="mt-2 text-base leading-relaxed text-muted">
+              <p className="mt-2 max-w-(--measure) text-(length:--text-body) leading-relaxed text-muted">
                 {principle.description}
               </p>
             </li>
@@ -55,7 +55,7 @@ export default function AboutSection() {
         >
           {PROFILE_FACTS.map((profileFact) => (
             <div key={profileFact.label}>
-              <dt className="font-mono text-xs tracking-[0.2em] text-muted uppercase">
+              <dt className="label">
                 {profileFact.label}
               </dt>
               <dd className="mt-2 text-base font-medium text-fg">
