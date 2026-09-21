@@ -13,11 +13,11 @@ export default function LabSection() {
     <section
       id="lab"
       ref={sectionRef}
-      className="mx-auto max-w-6xl px-5 py-24 md:px-10 md:py-32"
+      className="mx-auto flex min-h-svh max-w-6xl flex-col justify-center px-5 py-24 md:px-10 md:py-32"
     >
-      <SectionHeading index="04" title="Lab" caption="실험과 학습" />
+      <SectionHeading title="Lab" caption="실험과 학습" />
 
-      <ul className="border-b border-line">
+      <ul data-scene-text className="border-b border-line">
         {LAB_ITEMS.map((labItem) => (
           <li key={labItem.name} data-reveal className="border-t border-line">
             <a
@@ -32,10 +32,10 @@ export default function LabSection() {
               <span className="order-3 col-span-2 text-sm leading-relaxed text-muted md:order-none md:col-span-1 md:text-base">
                 {labItem.description}
               </span>
-              <span className="hidden font-mono text-xs text-muted md:block">
+              <span className="hidden font-mono text-(length:--text-label) text-muted md:block">
                 {labItem.language}
               </span>
-              <span className="font-mono text-xs text-muted md:text-right">
+              <span className="font-mono text-(length:--text-label) text-muted tabular-nums md:text-right">
                 {labItem.year}
               </span>
               <span

@@ -14,11 +14,11 @@ export default function WorkSection() {
     <section
       id="work"
       ref={sectionRef}
-      className="mx-auto max-w-6xl px-5 py-24 md:px-10 md:py-32"
+      className="mx-auto flex min-h-svh max-w-6xl flex-col justify-center px-5 py-24 md:px-10 md:py-32"
     >
-      <SectionHeading index="03" title="Work" caption="프로젝트" />
+      <SectionHeading title="Work" caption="프로젝트" />
 
-      <div className="space-y-8 md:space-y-12">
+      <div data-scene-text className="space-y-6 border-b border-line md:space-y-10">
         {PROJECTS.map((project, projectIndex) => (
           <ProjectCard
             key={project.id}

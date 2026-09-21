@@ -4,7 +4,7 @@ import { useSyncExternalStore } from "react";
 import { useTheme } from "next-themes";
 
 const BUTTON_CLASS_NAME =
-  "flex h-10 w-10 items-center justify-center rounded-full border border-line bg-surface/70 text-fg backdrop-blur transition-colors hover:border-accent hover:text-accent";
+  "flex h-10 w-10 items-center justify-center text-fg transition-colors duration-(--dur-short) hover:text-accent";
 
 const subscribeToNothing = () => () => {};
 

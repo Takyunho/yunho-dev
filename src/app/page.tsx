@@ -1,4 +1,4 @@
-import CustomCursor from "@/components/layout/CustomCursor";
+import Atmosphere from "@/components/layout/Atmosphere";
 import Header from "@/components/layout/Header";
 import SceneStateSync from "@/components/layout/SceneStateSync";
 import SmoothScroll from "@/components/layout/SmoothScroll";
@@ -15,6 +15,7 @@ export default function Home() {
     <div className="relative">
       <SmoothScroll />
       <SceneStateSync />
+      <Atmosphere />
       <SceneLoader />
       <Header />
 
@@ -27,7 +28,6 @@ export default function Home() {
         <ContactSection />
       </main>
 
-      <CustomCursor />
     </div>
   );
 }

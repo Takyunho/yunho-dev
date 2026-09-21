@@ -14,6 +14,7 @@ export interface Profile {
   principles: Principle[];
   email: string;
   githubUrl: string;
+  siteUrl: string;
 }
 
 export const PROFILE: Profile = {
@@ -38,4 +39,6 @@ export const PROFILE: Profile = {
   ],
   email: "tyh1819@gmail.com",
   githubUrl: "https://github.com/Takyunho",
+  // Vercel이 자동으로 만드는 -takyunhos-projects 주소는 로그인 보호에 걸려서 공개 주소로 쓸 수 없다
+  siteUrl: "https://yunho-dev.vercel.app",
 };

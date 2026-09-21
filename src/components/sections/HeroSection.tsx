@@ -25,8 +25,7 @@ export default function HeroSection() {
       });
       gsap.from("[data-hero-fade]", {
         autoAlpha: 0,
-        y: 24,
-        duration: 1,
+        duration: 0.6,
         ease: "power3.out",
         stagger: 0.1,
         delay: 0.9,
@@ -42,8 +41,8 @@ export default function HeroSection() {
       ref={sectionRef}
       className="flex min-h-svh flex-col justify-end px-5 pt-28 pb-10 md:px-10 md:pb-14"
     >
-      <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-        <h1 className="text-[clamp(3.5rem,12vw,11rem)] leading-[0.9] font-semibold tracking-tighter text-fg">
+      <div className="relative flex flex-col gap-8 before:absolute before:-inset-x-[8%] before:-inset-y-[18%] before:-z-10 before:rounded-[50%] before:bg-[radial-gradient(ellipse_at_50%_60%,var(--title-shade),transparent_72%)] before:content-[''] md:flex-row md:items-end md:justify-between">
+        <h1 className="display text-[clamp(3.75rem,13vw,12rem)] leading-[0.92] text-fg">
           {TITLE_LINES.map((titleLine) => (
             <span key={titleLine} className="line-mask">
               <span>{titleLine}</span>
@@ -52,11 +51,8 @@ export default function HeroSection() {
         </h1>
 
         <div className="max-w-xs md:pb-3 md:text-right">
-          <p
-            data-hero-fade
-            className="font-mono text-xs tracking-[0.2em] text-muted uppercase"
-          >
-            {PROFILE.nameKorean} / {PROFILE.nameEnglish}
+          <p data-hero-fade className="label">
+            {PROFILE.nameKorean} · {PROFILE.nameEnglish}
           </p>
           <p
             data-hero-fade
@@ -64,11 +60,10 @@ export default function HeroSection() {
           >
             {PROFILE.tagline}
           </p>
-          <p
-            data-hero-fade
-            className="mt-6 font-mono text-xs tracking-[0.2em] text-muted uppercase"
-          >
-            Scroll to explore ↓
+          <p data-hero-fade className="mt-6">
+            <a href="#work" className="text-link text-base text-fg">
+              프로젝트 보기 ↓
+            </a>
           </p>
         </div>
       </div>

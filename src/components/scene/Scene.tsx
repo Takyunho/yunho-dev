@@ -1,21 +1,18 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
-import { Physics } from "@react-three/rapier";
 import { useTheme } from "next-themes";
-import PhysicsCluster from "@/components/scene/PhysicsCluster";
-import PointerCollider from "@/components/scene/PointerCollider";
+import GlyphParticles from "@/components/scene/GlyphParticles";
+import PoolDrops from "@/components/scene/PoolDrops";
 import SceneLighting from "@/components/scene/SceneLighting";
+import UiParts from "@/components/scene/UiParts";
+import { CAMERA_DISTANCE, FIELD_OF_VIEW } from "@/components/scene/sceneLayout";
 import type { ThemeName } from "@/components/scene/themePalette";
+import { usePartGroups } from "@/components/scene/usePartGroups";
+import { usePartMaterials } from "@/components/scene/usePartMaterials";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-
-const DESKTOP_BODY_COUNT = 40;
-const MOBILE_BODY_COUNT = 14;
-const DESKTOP_CAMERA_DISTANCE = 18;
-const MOBILE_CAMERA_DISTANCE = 24;
-const REDUCED_MOTION_SETTLE_MILLISECONDS = 3000;
 
 interface SceneContentsProps {
   themeName: ThemeName;
@@ -25,6 +22,8 @@ interface SceneContentsProps {
 
 function SceneContents({ themeName, isMobile, isFrozen }: SceneContentsProps) {
   const invalidate = useThree((state) => state.invalidate);
+  const materials = usePartMaterials(themeName, isFrozen);
+  const parts = usePartGroups(materials);
   const castShadows = !isMobile;
 
   // frameloop이 demand인 동안에는 테마가 바뀌어도 스스로 다시 그리지 않는다
@@ -39,18 +38,25 @@ function SceneContents({ themeName, isMobile, isFrozen }: SceneContentsProps) {
         instantTheme={isFrozen}
         castShadows={castShadows}
       />
-      <Suspense fallback={null}>
-        <Physics gravity={[0, 0, 0]} paused={isFrozen}>
-          <PhysicsCluster
-            bodyCount={isMobile ? MOBILE_BODY_COUNT : DESKTOP_BODY_COUNT}
-            isMobile={isMobile}
+      <UiParts
+        parts={parts}
+        materials={materials}
+        themeName={themeName}
+        isMobile={isMobile}
+        isFrozen={isFrozen}
+        castShadows={castShadows}
+      />
+      {!isFrozen && (
+        <>
+          <GlyphParticles
+            parts={parts}
             themeName={themeName}
-            instantTheme={isFrozen}
-            castShadows={castShadows}
+            isMobile={isMobile}
           />
-          <PointerCollider />
-        </Physics>
-      </Suspense>
+          {/* 웅덩이 진행도를 GlyphParticles가 갱신한 뒤에 읽도록 뒤에 둔다 */}
+          <PoolDrops themeName={themeName} />
+        </>
+      )}
     </>
   );
 }
@@ -61,19 +67,9 @@ export default function Scene() {
   const themeName: ThemeName = resolvedTheme === "dark" ? "dark" : "light";
   const isMobile = useMediaQuery("(max-width: 768px)");
   const reducedMotion = useReducedMotion();
-  const [hasSettled, setHasSettled] = useState(false);
 
-  useEffect(() => {
-    if (!reducedMotion) return;
-    const settleTimeoutId = window.setTimeout(
-      () => setHasSettled(true),
-      REDUCED_MOTION_SETTLE_MILLISECONDS,
-    );
-    return () => window.clearTimeout(settleTimeoutId);
-  }, [reducedMotion]);
-
-  // reduced motion에서는 오브젝트가 자리를 잡은 뒤 물리와 렌더 루프를 멈춘다
-  const isFrozen = reducedMotion && hasSettled;
+  // reduced motion에서는 굳은 덩어리를 히어로에 정지시켜 두고 렌더 루프를 멈춘다
+  const isFrozen = reducedMotion;
 
   return (
     <Canvas
@@ -82,12 +78,8 @@ export default function Scene() {
       frameloop={isFrozen ? "demand" : "always"}
       gl={{ alpha: true, antialias: true }}
       camera={{
-        position: [
-          0,
-          0,
-          isMobile ? MOBILE_CAMERA_DISTANCE : DESKTOP_CAMERA_DISTANCE,
-        ],
-        fov: 35,
+        position: [0, 0, CAMERA_DISTANCE],
+        fov: FIELD_OF_VIEW,
         near: 0.1,
         far: 100,
       }}

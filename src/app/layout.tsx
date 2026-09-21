@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import ThemeProvider from "@/components/layout/ThemeProvider";
+import { PROFILE } from "@/content/profile";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -13,11 +14,21 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// 큰 제목 전용 세리프. 굵기가 하나뿐이라 크기로 위계를 만든다
+const instrumentSerif = Instrument_Serif({
+  variable: "--font-instrument-serif",
+  subsets: ["latin"],
+  weight: "400",
+});
+
 const SITE_TITLE = "탁윤호 | Frontend Engineer";
 const SITE_DESCRIPTION =
   "사용자가 머무르고 싶은 화면을 만드는 프론트엔드 개발자 탁윤호의 포트폴리오입니다.";
 
 export const metadata: Metadata = {
+  // 이 값이 없으면 og:image 같은 상대 경로가 절대 주소로 풀리지 않아서 링크 미리보기에 이미지가 나오지 않는다
+  metadataBase: new URL(PROFILE.siteUrl),
+  alternates: { canonical: "/" },
   title: SITE_TITLE,
   description: SITE_DESCRIPTION,
   keywords: [
@@ -32,6 +43,8 @@ export const metadata: Metadata = {
   openGraph: {
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
+    url: "/",
+    siteName: "yunho.dev",
     type: "website",
     locale: "ko_KR",
   },
@@ -46,7 +59,7 @@ export default function RootLayout({
     // next-themes가 hydration 전에 data-theme을 써넣기 때문에 경고를 끈다
     <html lang="ko" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} font-sans antialiased`}
       >
         <noscript>
           <style>{`.line-mask > span { transform: none; }`}</style>
