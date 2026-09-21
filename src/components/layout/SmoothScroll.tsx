@@ -15,8 +15,8 @@ export default function SmoothScroll() {
     const lenis = new Lenis({
       autoRaf: false,
       anchors: true,
-      lerp: 0.05,
-      wheelMultiplier: 0.7,
+      lerp: 0.08,
+      wheelMultiplier: 0.9,
     });
     lenis.on("scroll", ScrollTrigger.update);
 
