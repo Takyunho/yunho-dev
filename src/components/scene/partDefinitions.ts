@@ -567,16 +567,57 @@ function createThemeToggle(materials: PartMaterials): THREE.Group {
   return group;
 }
 
+// 모서리가 둥글고 면이 살짝 볼록한 상자. 면이 완전히 평평하면 조명을 정면으로 반사할 때 면 전체가 한꺼번에 밝아져
+// 네모난 얼룩처럼 보인다. 구의 각 좌표를 거듭제곱해서 만든다(|x/a|^n + |y/b|^n + |z/c|^n = 1). 지수가 클수록 상자에 가깝다
+function createPillowGeometry(
+  width: number,
+  height: number,
+  depth: number,
+  exponent: number,
+): THREE.BufferGeometry {
+  const geometry = new THREE.SphereGeometry(1, 64, 48);
+  const halfSize = [width / 2, height / 2, depth / 2];
+  const positions = geometry.attributes.position;
+  const normals = geometry.attributes.normal;
+  const normal = new THREE.Vector3();
+  for (let vertexIndex = 0; vertexIndex < positions.count; vertexIndex += 1) {
+    const direction = [
+      positions.getX(vertexIndex),
+      positions.getY(vertexIndex),
+      positions.getZ(vertexIndex),
+    ];
+    const point = direction.map(
+      (component, axis) =>
+        Math.sign(component) *
+        Math.abs(component) ** (2 / exponent) *
+        halfSize[axis],
+    );
+    // 이음매에서 정점이 겹치는 구라서 면에서 다시 계산하면 줄이 생긴다. 곡면 식의 기울기로 법선을 직접 구한다
+    normal
+      .set(
+        ...(point.map(
+          (component, axis) =>
+            (Math.sign(component) *
+              Math.abs(component / halfSize[axis]) ** (exponent - 1)) /
+            halfSize[axis],
+        ) as [number, number, number]),
+      )
+      .normalize();
+    positions.setXYZ(vertexIndex, point[0], point[1], point[2]);
+    normals.setXYZ(vertexIndex, normal.x, normal.y, normal.z);
+  }
+  geometry.computeBoundingBox();
+  geometry.computeBoundingSphere();
+  return geometry;
+}
+
 function createCheckbox(materials: PartMaterials): THREE.Group {
   const group = new THREE.Group();
-  addMesh(
-    group,
-    new RoundedBoxGeometry(1.15, 1.15, 0.4, 5, 0.24),
-    materials.accent,
-  );
+  addMesh(group, createPillowGeometry(1.15, 1.15, 0.4, 5), materials.accent);
+  // 체크 표시는 파란 바탕 위에 있어서 테마와 상관없이 흰색이어야 읽힌다. contrast는 라이트 모드에서 검정이다
   addCapsuleBetween(
     group,
-    materials.contrast,
+    materials.bright,
     [-0.3, 0.0],
     [-0.08, -0.24],
     0.075,
@@ -584,7 +625,7 @@ function createCheckbox(materials: PartMaterials): THREE.Group {
   );
   addCapsuleBetween(
     group,
-    materials.contrast,
+    materials.bright,
     [-0.08, -0.24],
     [0.32, 0.26],
     0.075,
@@ -615,7 +656,7 @@ export const PART_DEFINITIONS: PartDefinition[] = [
     key: "browser-window",
     create: createBrowserWindow,
     halfWidth: 1.5,
-    clump: [0.2, 0.5, -0.6],
+    clump: [0.5, 0.55, -0.6],
     rotation: [-0.25, 0.45, 0.08],
     side: [-1, 0.42, -0.5],
     gap: [0, -1],
@@ -624,7 +665,7 @@ export const PART_DEFINITIONS: PartDefinition[] = [
     key: "responsive-devices",
     create: createResponsiveDevices,
     halfWidth: 1.5,
-    clump: [-1.9, -1.4, 0.9],
+    clump: [-2.0, -2.0, 0.9],
     rotation: [0.2, -0.4, -0.06],
     side: [1, -0.52, 0.4],
     gap: [1, 1],
@@ -633,7 +674,8 @@ export const PART_DEFINITIONS: PartDefinition[] = [
     key: "modal",
     create: createModal,
     halfWidth: 1.25,
-    clump: [2.0, -1.5, 1.0],
+    // 앞으로 나와 있어 원근 때문에 더 크게, 더 바깥으로 보인다. 화면 오른쪽 끝에 붙지 않게 x를 덜 준다
+    clump: [1.8, -1.9, 1.0],
     // 흩어지면 y로 0.6만큼 더 돌기 때문에, 창이 납작하게 눕지 않도록 반대쪽으로 돌려 둔다
     rotation: [-0.12, -0.3, 0.08],
     side: [-1, -0.5, 0.6],
@@ -643,7 +685,7 @@ export const PART_DEFINITIONS: PartDefinition[] = [
     key: "theme-toggle",
     create: createThemeToggle,
     halfWidth: 1.5,
-    clump: [-1.3, 2.1, 0.6],
+    clump: [-1.4, 2.65, 0.6],
     // 흩어지면 y로 0.6만큼 더 돌기 때문에, 그때 정면에 가깝게 보이도록 반대쪽으로 돌려 둔다
     rotation: [0.15, -0.4, -0.12],
     // 세로 비율은 맞은편의 브라우저 창과 같은 값이라 둘이 같은 높이에 놓인다
@@ -654,7 +696,7 @@ export const PART_DEFINITIONS: PartDefinition[] = [
     key: "checkbox",
     create: createCheckbox,
     halfWidth: 0.6,
-    clump: [2.5, 1.6, 0.4],
+    clump: [2.9, 1.9, 0.4],
     rotation: [0.4, -0.5, 0.3],
     // 세로 비율은 맞은편의 코드 괄호와 같은 값이라 둘이 같은 높이에 놓인다
     side: [1, -0.04, -0.3],
@@ -664,7 +706,7 @@ export const PART_DEFINITIONS: PartDefinition[] = [
     key: "code-brackets",
     create: createCodeBrackets,
     halfWidth: 1.2,
-    clump: [-3.0, 0.3, -0.2],
+    clump: [-3.2, 0.3, -0.2],
     rotation: [0.1, 0.35, 0.12],
     side: [-1, -0.04, 0.1],
     gap: [2, -1],
