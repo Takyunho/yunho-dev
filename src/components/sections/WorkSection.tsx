@@ -39,6 +39,7 @@ export default function WorkSection() {
   const [viewMode, setViewMode] = useState<ViewMode>("list");
   const [pageIndex, setPageIndex] = useState(0);
   const [pageCount, setPageCount] = useState(0);
+  const [reservedListHeight, setReservedListHeight] = useState(0);
 
   // 세로 스크롤을 막지 않으면서 좌우로만 끌리게 한다
   const [emblaRef, emblaApi] = useEmblaCarousel({
@@ -103,6 +104,26 @@ export default function WorkSection() {
     }
     ScrollTrigger.refresh();
   }, [emblaApi, selectedFilter, viewMode]);
+
+  // 분류를 좁히면 목록이 짧아지고, 그만큼 문서 전체가 줄어 보던 자리가 위로 밀린다.
+  // 그래서 지금까지 나온 가장 높은 면만큼 자리를 계속 비워 둔다. 자리가 줄지 않으니 화면도 움직이지 않는다
+  const reserveTallestPage = useCallback(() => {
+    if (!emblaApi) return;
+    const pageHeight = emblaApi.containerNode().offsetHeight;
+    setReservedListHeight((reserved) => Math.max(reserved, pageHeight));
+  }, [emblaApi]);
+
+  useEffect(reserveTallestPage, [reserveTallestPage, pages]);
+
+  // 폭이 달라지면 카드가 접히는 줄 수가 바뀌어 재 둔 높이가 맞지 않는다. 비워 두었던 자리를 걷고 다시 잰다
+  useEffect(() => {
+    const remeasure = () => {
+      setReservedListHeight(0);
+      window.setTimeout(reserveTallestPage, 0);
+    };
+    window.addEventListener("resize", remeasure);
+    return () => window.removeEventListener("resize", remeasure);
+  }, [reserveTallestPage]);
 
   const scrollPrevious = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
@@ -172,37 +193,47 @@ export default function WorkSection() {
           </div>
         </div>
 
-        {/* 섹션이 화면보다 길어서 목록 아래에 두면 도착하자마자 보이지 않는다. 그래서 목록 위에 둔다 */}
-        {pageCount > 1 && (
-          <div className="mt-6 flex items-center justify-end gap-4">
-            <p className="label tabular-nums">
-              {pageIndex + 1} / {pageCount}
-            </p>
+        {/* 면이 하나뿐이면 넘길 곳이 없어 감추지만 자리는 남긴다. 사라졌다 나타나면 그만큼 목록이 위아래로 뛴다 */}
+        <div
+          aria-hidden={pageCount <= 1}
+          className={`mt-6 flex items-center justify-end gap-4 ${
+            pageCount > 1 ? "" : "invisible"
+          }`}
+        >
+          <p className="label tabular-nums">
+            {pageIndex + 1} / {pageCount}
+          </p>
 
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                aria-label="이전 프로젝트 보기"
-                onClick={scrollPrevious}
-                disabled={pageIndex === 0}
-                className="flex size-9 items-center justify-center rounded-full border border-line text-fg transition-colors duration-(--dur-short) hover:border-accent hover:text-accent disabled:pointer-events-none disabled:opacity-35"
-              >
-                <span aria-hidden="true">←</span>
-              </button>
-              <button
-                type="button"
-                aria-label="다음 프로젝트 보기"
-                onClick={scrollNext}
-                disabled={pageIndex === pageCount - 1}
-                className="flex size-9 items-center justify-center rounded-full border border-line text-fg transition-colors duration-(--dur-short) hover:border-accent hover:text-accent disabled:pointer-events-none disabled:opacity-35"
-              >
-                <span aria-hidden="true">→</span>
-              </button>
-            </div>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              aria-label="이전 프로젝트 보기"
+              onClick={scrollPrevious}
+              disabled={pageIndex === 0}
+              className="flex size-9 items-center justify-center rounded-full border border-line text-fg transition-colors duration-(--dur-short) hover:border-accent hover:text-accent disabled:pointer-events-none disabled:opacity-35"
+            >
+              <span aria-hidden="true">←</span>
+            </button>
+            <button
+              type="button"
+              aria-label="다음 프로젝트 보기"
+              onClick={scrollNext}
+              disabled={pageIndex === pageCount - 1}
+              className="flex size-9 items-center justify-center rounded-full border border-line text-fg transition-colors duration-(--dur-short) hover:border-accent hover:text-accent disabled:pointer-events-none disabled:opacity-35"
+            >
+              <span aria-hidden="true">→</span>
+            </button>
           </div>
-        )}
+        </div>
+
         {/* 끌어서 넘기는 영역이다. 면 하나에 보기 방식별 개수만큼 들어간다 */}
-        <div className="mt-4 overflow-hidden" ref={emblaRef}>
+        <div
+          className="mt-4 overflow-hidden"
+          ref={emblaRef}
+          style={
+            reservedListHeight ? { minHeight: reservedListHeight } : undefined
+          }
+        >
           <div className="flex">
             {pages.map((pageProjects, currentPageIndex) => (
               <div
