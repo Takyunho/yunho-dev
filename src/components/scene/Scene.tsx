@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
 import { useTheme } from "next-themes";
 import GlyphParticles from "@/components/scene/GlyphParticles";
+import PoolDrops from "@/components/scene/PoolDrops";
 import SceneLighting from "@/components/scene/SceneLighting";
 import UiParts from "@/components/scene/UiParts";
 import { CAMERA_DISTANCE, FIELD_OF_VIEW } from "@/components/scene/sceneLayout";
@@ -46,11 +47,15 @@ function SceneContents({ themeName, isMobile, isFrozen }: SceneContentsProps) {
         castShadows={castShadows}
       />
       {!isFrozen && (
-        <GlyphParticles
-          parts={parts}
-          themeName={themeName}
-          isMobile={isMobile}
-        />
+        <>
+          <GlyphParticles
+            parts={parts}
+            themeName={themeName}
+            isMobile={isMobile}
+          />
+          {/* 웅덩이 진행도를 GlyphParticles가 갱신한 뒤에 읽도록 뒤에 둔다 */}
+          <PoolDrops themeName={themeName} />
+        </>
       )}
     </>
   );

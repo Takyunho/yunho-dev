@@ -39,6 +39,8 @@ export const sceneState = {
   pointerActive: false,
   // 커서가 움직인 NDC 거리를 쌓은 값. 파도의 세기이고 3D 쪽이 프레임마다 줄인다
   pointerEnergy: 0,
+  // 클릭한 자리 (NDC). 3D 쪽이 웅덩이일 때 한 번 꺼내 쓰고 비운다
+  pendingPoolClick: null as { x: number; y: number } | null,
   accentOverride: null as string | null,
   layout: {
     // Stack 문구가 실제로 시작하는 x. 부품을 본문 옆에 둘 수 있는지 판단하는 여백이다

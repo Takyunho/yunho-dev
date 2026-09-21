@@ -194,6 +194,14 @@ export default function SceneStateSync() {
     };
     // 터치 스크롤 중에는 pointermove가 오지 않으므로 탭이 그 자리에서 파도를 일으킨다
     const handlePointerDown = (event: PointerEvent) => {
+      // 웅덩이 위 빈 곳을 누르면 그 자리에서 점이 떨어진다. 링크와 버튼을 누른 것은 빼고 본다
+      const targetElement = event.target as Element | null;
+      sceneState.pendingPoolClick = targetElement?.closest("a, button")
+        ? null
+        : {
+            x: (event.clientX / window.innerWidth) * 2 - 1,
+            y: -(event.clientY / window.innerHeight) * 2 + 1,
+          };
       if (event.pointerType === "mouse") return;
       setPointerFromEvent(event);
       sceneState.pointerEnergy = 1;
