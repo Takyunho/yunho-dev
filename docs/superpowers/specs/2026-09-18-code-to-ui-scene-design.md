@@ -288,7 +288,7 @@ CPU에서 64칸 1차원 수면을 계산해 높이와 속도를 uniform 배열�
 
 터치 스크롤 중에는 pointermove가 오지 않고 pointercancel이 온다. 그래서 터치에서는 pointerdown(탭)이 그 자리에 에너지 1을 넣어 파도를 일으킨다.
 
-Contact의 푸터(저작권, "Built with")는 웅덩이 위에 놓인다. 읽히도록 배경색 60% 반투명 띠를 깐다. 문구는 "Built with Next.js, React Three Fiber"로 바꾼다.
+Contact의 푸터(저작권)는 웅덩이 위에 놓인다. 반투명 띠를 깔면 그 위 경계가 선처럼 보여 웅덩이를 자르므로, 화면 아래로 갈수록 짙어지는 그라데이션으로 바탕을 만든다.
 
 ## 안개 층과 히어로 가독성
 

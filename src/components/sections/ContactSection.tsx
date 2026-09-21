@@ -16,7 +16,7 @@ export default function ContactSection() {
     <section
       id="contact"
       ref={sectionRef}
-      className="flex min-h-svh flex-col justify-between px-5 pt-32 pb-8 md:px-10"
+      className="flex min-h-svh flex-col justify-between px-5 pt-32 md:px-10"
     >
       <div>
         <h2
@@ -41,12 +41,20 @@ export default function ContactSection() {
         </div>
       </div>
 
-      {/* 웅덩이 위에 놓이므로 반투명 띠를 깔아 읽히게 한다 */}
-      <footer className="label flex flex-col gap-1 border-t border-line bg-(--header-shade) px-1 pt-3 md:flex-row md:justify-between">
-        <p>
-          © {CURRENT_YEAR} {PROFILE.nameEnglish}
-        </p>
-        <p>Built with Next.js, React Three Fiber</p>
+      {/* 웅덩이 위에 놓인다. 반투명 띠를 깔면 그 위 경계가 선처럼 보여서, 화면 아래로 갈수록 짙어지는
+          그라데이션으로 바탕을 만든다. 좌우 여백 바깥까지 덮도록 음수 여백으로 넓힌다 */}
+      <footer className="label relative -mx-5 px-5 pt-24 pb-7 md:-mx-10 md:px-10">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 bg-linear-to-b from-transparent to-(--header-shade)"
+        />
+        <div className="relative flex flex-col gap-1 md:flex-row md:items-baseline md:justify-between md:gap-6">
+          <p>
+            © <span className="tabular-nums">{CURRENT_YEAR}</span>{" "}
+            {PROFILE.nameEnglish}
+          </p>
+          <p>Built with Next.js, React Three Fiber</p>
+        </div>
       </footer>
     </section>
   );
