@@ -1,3 +1,4 @@
+import ExternalLink from "@/components/layout/ExternalLink";
 import ThemeToggle from "@/components/layout/ThemeToggle";
 import { PROFILE } from "@/content/profile";
 
@@ -11,39 +12,33 @@ const NAVIGATION_ITEMS = [
 
 export default function Header() {
   return (
-    <header className="fixed inset-x-0 top-0 z-30 flex items-center justify-between px-5 py-4 md:px-10 md:py-6">
-      <a
-        href="#hero"
-        // 가장자리로 퍼진 3D 오브젝트와 겹쳐도 읽히도록 내비게이션과 같은 배경을 준다
-        className="flex h-10 items-center rounded-full border border-line bg-surface/70 px-4 text-base font-semibold tracking-tight text-fg backdrop-blur"
-      >
+    // 로고는 맨바탕에 두고, 오른쪽 메뉴 묶음만 떠 있는 유리 위에 올린다. 3D 오브젝트와 겹쳐도 메뉴 글자가 읽히게 하려는 것이다
+    <header className="fixed inset-x-5 top-3 z-30 flex items-center justify-between md:inset-x-10 md:top-4">
+      <a href="#hero" className="display text-2xl leading-none text-fg">
         yunho<span className="text-accent">.dev</span>
       </a>
 
-      <div className="flex items-center gap-2">
+      <div className="liquid-glass relative flex items-center gap-5 rounded-full py-1 pr-2 pl-6 md:gap-7 md:pr-3 md:pl-7">
         <nav
           aria-label="섹션 이동"
-          className="hidden items-center gap-1 rounded-full border border-line bg-surface/70 px-2 py-1 backdrop-blur md:flex"
+          className="hidden items-center gap-6 md:flex"
         >
           {NAVIGATION_ITEMS.map((navigationItem) => (
             <a
               key={navigationItem.href}
               href={navigationItem.href}
-              className="rounded-full px-3 py-1.5 text-sm text-muted transition-colors hover:text-fg"
+              className="text-[0.9375rem] whitespace-nowrap text-muted transition-colors duration-(--dur-short) hover:text-fg"
             >
               {navigationItem.label}
             </a>
           ))}
         </nav>
 
-        <a
+        <ExternalLink
           href={PROFILE.githubUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="flex h-10 items-center rounded-full border border-line bg-surface/70 px-4 text-sm text-fg backdrop-blur transition-colors hover:border-accent hover:text-accent"
-        >
-          GitHub
-        </a>
+          label="GitHub"
+          className="text-link text-[0.9375rem] whitespace-nowrap text-fg"
+        />
         <ThemeToggle />
       </div>
     </header>
