@@ -4,37 +4,67 @@ export interface StackCategory {
   items: string[];
 }
 
+// 실제 제품에 써 본 것만 적는다. 학습만 한 것은 Lab 섹션에 둔다
 export const STACK_CATEGORIES: StackCategory[] = [
   {
-    label: "Languages",
-    labelKorean: "언어",
-    items: ["HTML5", "CSS3", "JavaScript", "TypeScript"],
+    label: "Core",
+    labelKorean: "주력",
+    items: ["React", "JavaScript", "TypeScript", "Next.js"],
   },
   {
-    label: "Frameworks",
-    labelKorean: "프레임워크",
-    items: ["React", "Next.js", "Vue.js"],
-  },
-  {
-    label: "Libraries",
-    labelKorean: "라이브러리",
+    label: "State & Data",
+    labelKorean: "상태와 데이터",
     items: [
       "TanStack Query",
+      "TanStack Table",
       "Zustand",
+      "Axios",
       "Socket.IO",
-      "i18next",
-      "xy-flow",
-      "Three.js",
+      "WebSocket",
     ],
   },
   {
-    label: "Styling",
-    labelKorean: "스타일링",
-    items: ["CSS Modules", "Tailwind CSS"],
+    label: "Visualization",
+    labelKorean: "시각화",
+    items: [
+      "React Flow",
+      "ApexCharts",
+      "Konva",
+      "Three.js",
+      "hls.js",
+      "wavesurfer.js",
+    ],
   },
   {
-    label: "Tools",
-    labelKorean: "도구",
-    items: ["Node.js", "Git", "GitHub", "Figma", "Docker"],
+    label: "UI & Styling",
+    labelKorean: "UI와 스타일",
+    items: ["디자인 토큰 CSS", "Tailwind CSS", "CSS Modules", "GSAP"],
+  },
+  {
+    label: "i18n",
+    labelKorean: "국제화",
+    items: [
+      "i18next",
+      "react-i18next",
+      "next-i18n-router",
+      "번역 키 자동 추출",
+    ],
+  },
+  {
+    label: "Build & Workflow",
+    labelKorean: "빌드와 협업",
+    items: [
+      "Vite",
+      "ESLint",
+      "Prettier",
+      "GitHub Actions",
+      "npm 패키지 배포",
+      "MSW",
+    ],
+  },
+  {
+    label: "Also used",
+    labelKorean: "그 외 경험",
+    items: ["Vue 2", "Plotly.js", "Chart.js", "Fabric.js"],
   },
 ];
