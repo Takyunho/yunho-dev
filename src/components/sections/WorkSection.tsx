@@ -1,7 +1,9 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import useEmblaCarousel from "embla-carousel-react";
 import ProjectCard from "@/components/sections/ProjectCard";
+import ProjectGridCard from "@/components/sections/ProjectGridCard";
 import SectionHeading from "@/components/sections/SectionHeading";
 import { ScrollTrigger } from "@/lib/gsap";
 import { PROJECT_DETAILS } from "@/content/projectDetails";
@@ -9,16 +11,40 @@ import { useRevealOnScroll } from "@/hooks/useRevealOnScroll";
 import {
   PROJECTS,
   PROJECT_CATEGORIES,
+  type Project,
   type ProjectCategoryId,
 } from "@/content/projects";
 
 const ALL_FILTER = "all";
 type FilterId = typeof ALL_FILTER | ProjectCategoryId;
 
+// 한 면에 담는 개수. 그리드에서는 2×2가 된다
+const PROJECTS_PER_PAGE = 4;
+
+type ViewMode = "list" | "grid";
+
+const VIEW_MODES: { id: ViewMode; label: string }[] = [
+  { id: "list", label: "리스트" },
+  { id: "grid", label: "그리드" },
+];
+
+function detailHrefOf(project: Project): string | undefined {
+  return PROJECT_DETAILS[project.id] ? `/work/${project.id}` : undefined;
+}
+
 export default function WorkSection() {
   const sectionRef = useRef<HTMLElement>(null);
   useRevealOnScroll(sectionRef);
   const [selectedFilter, setSelectedFilter] = useState<FilterId>(ALL_FILTER);
+  const [viewMode, setViewMode] = useState<ViewMode>("list");
+  const [pageIndex, setPageIndex] = useState(0);
+  const [pageCount, setPageCount] = useState(0);
+
+  // 세로 스크롤을 막지 않으면서 좌우로만 끌리게 한다
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    align: "start",
+    containScroll: "trimSnaps",
+  });
 
   const categoryById = useMemo(
     () =>
@@ -39,15 +65,48 @@ export default function WorkSection() {
     [],
   );
 
-  const visibleProjects =
-    selectedFilter === ALL_FILTER
-      ? PROJECTS
-      : PROJECTS.filter((project) => project.categoryId === selectedFilter);
-
-  // 목록 높이가 바뀌면 아래 섹션의 스크롤 연출 기준점도 달라진다
-  useEffect(() => {
-    ScrollTrigger.refresh();
+  const pages = useMemo(() => {
+    const visibleProjects =
+      selectedFilter === ALL_FILTER
+        ? PROJECTS
+        : PROJECTS.filter((project) => project.categoryId === selectedFilter);
+    const grouped: Project[][] = [];
+    for (
+      let startIndex = 0;
+      startIndex < visibleProjects.length;
+      startIndex += PROJECTS_PER_PAGE
+    ) {
+      grouped.push(
+        visibleProjects.slice(startIndex, startIndex + PROJECTS_PER_PAGE),
+      );
+    }
+    return grouped;
   }, [selectedFilter]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    const syncPosition = () => {
+      setPageIndex(emblaApi.selectedScrollSnap());
+      setPageCount(emblaApi.scrollSnapList().length);
+    };
+    syncPosition();
+    emblaApi.on("select", syncPosition).on("reInit", syncPosition);
+    return () => {
+      emblaApi.off("select", syncPosition).off("reInit", syncPosition);
+    };
+  }, [emblaApi]);
+
+  // 분류나 보기 방식이 바뀌면 면의 수와 높이가 달라진다. 첫 면으로 되돌리고 스크롤 연출 기준점도 다시 잡는다
+  useEffect(() => {
+    if (emblaApi) {
+      emblaApi.reInit();
+      emblaApi.scrollTo(0, true);
+    }
+    ScrollTrigger.refresh();
+  }, [emblaApi, selectedFilter, viewMode]);
+
+  const scrollPrevious = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
+  const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
 
   return (
     <section
@@ -58,52 +117,122 @@ export default function WorkSection() {
       <SectionHeading title="Work" caption="프로젝트" />
 
       <div data-scene-text>
-        <div
-          role="group"
-          aria-label="프로젝트 분류"
-          className="flex flex-wrap items-baseline gap-x-5 gap-y-2"
-        >
-          {filters.map((filter) => {
-            const isSelected = filter.id === selectedFilter;
-            return (
-              <button
-                key={filter.id}
-                type="button"
-                aria-pressed={isSelected}
-                onClick={() => setSelectedFilter(filter.id)}
-                className={`text-(length:--text-body) whitespace-nowrap transition-colors duration-(--dur-short) ${
-                  isSelected ? "text-link text-fg" : "text-muted hover:text-fg"
-                }`}
-              >
-                {filter.label}
-                <span className="label ml-1.5 tabular-nums">
-                  {filter.count}
-                </span>
-              </button>
-            );
-          })}
+        <div className="flex flex-col gap-4 md:flex-row md:items-baseline md:justify-between">
+          <div
+            role="group"
+            aria-label="프로젝트 분류"
+            className="flex flex-wrap items-baseline gap-x-5 gap-y-2"
+          >
+            {filters.map((filter) => {
+              const isSelected = filter.id === selectedFilter;
+              return (
+                <button
+                  key={filter.id}
+                  type="button"
+                  aria-pressed={isSelected}
+                  onClick={() => setSelectedFilter(filter.id)}
+                  className={`text-(length:--text-body) whitespace-nowrap transition-colors duration-(--dur-short) ${
+                    isSelected ? "text-link text-fg" : "text-muted hover:text-fg"
+                  }`}
+                >
+                  {filter.label}
+                  <span className="label ml-1.5 tabular-nums">
+                    {filter.count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          <div
+            role="group"
+            aria-label="보기 방식"
+            className="flex shrink-0 items-baseline gap-x-4"
+          >
+            {VIEW_MODES.map((mode) => {
+              const isSelected = mode.id === viewMode;
+              return (
+                <button
+                  key={mode.id}
+                  type="button"
+                  aria-pressed={isSelected}
+                  onClick={() => setViewMode(mode.id)}
+                  className={`label whitespace-nowrap transition-colors duration-(--dur-short) ${
+                    isSelected ? "text-link text-fg" : "hover:text-fg"
+                  }`}
+                >
+                  {mode.label}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
-        {/* 카드 사이 간격은 카드 자신의 위아래 여백으로만 만든다. 여기서 간격을 더하면 마지막 카드와
-            아래 구분선 사이만 좁아져 카드마다 높이가 달라 보인다 */}
-        <div className="mt-8 border-b border-line">
-          {visibleProjects.map((project) => {
-            const category = categoryById.get(project.categoryId);
-            if (!category) return null;
-            return (
-              <ProjectCard
-                key={project.id}
-                project={project}
-                category={category}
-                detailHref={
-                  PROJECT_DETAILS[project.id]
-                    ? `/work/${project.id}`
-                    : undefined
-                }
-              />
-            );
-          })}
+        {/* 끌어서 넘기는 영역이다. 면 하나에 PROJECTS_PER_PAGE만큼 들어간다 */}
+        <div className="mt-8 overflow-hidden" ref={emblaRef}>
+          <div className="flex">
+            {pages.map((pageProjects, currentPageIndex) => (
+              <div
+                key={currentPageIndex}
+                aria-label={`${currentPageIndex + 1} / ${pages.length} 페이지`}
+                className={`min-w-0 shrink-0 grow-0 basis-full border-b border-line ${
+                  viewMode === "grid"
+                    ? "grid grid-cols-1 gap-x-8 gap-y-6 pb-8 sm:grid-cols-2"
+                    : ""
+                }`}
+              >
+                {pageProjects.map((project) => {
+                  const category = categoryById.get(project.categoryId);
+                  if (!category) return null;
+                  return viewMode === "grid" ? (
+                    <ProjectGridCard
+                      key={project.id}
+                      project={project}
+                      category={category}
+                      detailHref={detailHrefOf(project)}
+                    />
+                  ) : (
+                    <ProjectCard
+                      key={project.id}
+                      project={project}
+                      category={category}
+                      detailHref={detailHrefOf(project)}
+                    />
+                  );
+                })}
+              </div>
+            ))}
+          </div>
         </div>
+
+        {pageCount > 1 && (
+          <div className="mt-6 flex items-center justify-between gap-6">
+            <p className="label tabular-nums">
+              {pageIndex + 1} / {pageCount}
+            </p>
+
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                aria-label="이전 프로젝트 보기"
+                onClick={scrollPrevious}
+                disabled={pageIndex === 0}
+                className="flex size-9 items-center justify-center rounded-full border border-line text-fg transition-colors duration-(--dur-short) hover:border-accent hover:text-accent disabled:pointer-events-none disabled:opacity-35"
+              >
+                <span aria-hidden="true">←</span>
+              </button>
+              <button
+                type="button"
+                aria-label="다음 프로젝트 보기"
+                onClick={scrollNext}
+                disabled={pageIndex === pageCount - 1}
+                className="flex size-9 items-center justify-center rounded-full border border-line text-fg transition-colors duration-(--dur-short) hover:border-accent hover:text-accent disabled:pointer-events-none disabled:opacity-35"
+              >
+                <span aria-hidden="true">→</span>
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );
