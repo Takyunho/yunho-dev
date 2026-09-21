@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import ExternalLink from "@/components/layout/ExternalLink";
 import { sceneState } from "@/components/scene/sceneState";
 import type { Project, ProjectCategory } from "@/content/projects";
@@ -7,9 +8,17 @@ import type { Project, ProjectCategory } from "@/content/projects";
 interface ProjectCardProps {
   project: Project;
   category: ProjectCategory;
+  // 상세를 쓴 프로젝트만 값이 있다. 없으면 제목이 링크가 되지 않는다
+  detailHref?: string;
 }
 
-export default function ProjectCard({ project, category }: ProjectCardProps) {
+export default function ProjectCard({
+  project,
+  category,
+  detailHref,
+}: ProjectCardProps) {
+  const titleClassName =
+    "text-xl leading-snug font-semibold tracking-tight text-fg transition-colors duration-(--dur-short) group-hover:text-(--project-accent) md:text-2xl";
   const applyAccent = () => {
     sceneState.accentOverride = category.accentColor;
   };
@@ -37,8 +46,20 @@ export default function ProjectCard({ project, category }: ProjectCardProps) {
       </div>
 
       <div>
-        <h3 className="text-xl leading-snug font-semibold tracking-tight text-fg transition-colors duration-(--dur-short) group-hover:text-(--project-accent) md:text-2xl">
-          {project.title}
+        <h3 className={titleClassName}>
+          {detailHref ? (
+            <Link href={detailHref} className="inline-flex items-baseline gap-2">
+              {project.title}
+              <span
+                aria-hidden="true"
+                className="text-base transition-transform duration-(--dur-short) group-hover:translate-x-1"
+              >
+                →
+              </span>
+            </Link>
+          ) : (
+            project.title
+          )}
         </h3>
         <p className="label mt-1">{project.role}</p>
 

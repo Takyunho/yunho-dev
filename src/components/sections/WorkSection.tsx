@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import ProjectCard from "@/components/sections/ProjectCard";
 import SectionHeading from "@/components/sections/SectionHeading";
 import { ScrollTrigger } from "@/lib/gsap";
+import { PROJECT_DETAILS } from "@/content/projectDetails";
 import { useRevealOnScroll } from "@/hooks/useRevealOnScroll";
 import {
   PROJECTS,
@@ -94,6 +95,11 @@ export default function WorkSection() {
                 key={project.id}
                 project={project}
                 category={category}
+                detailHref={
+                  PROJECT_DETAILS[project.id]
+                    ? `/work/${project.id}`
+                    : undefined
+                }
               />
             );
           })}
