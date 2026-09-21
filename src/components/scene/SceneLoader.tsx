@@ -4,7 +4,7 @@ import { useSyncExternalStore } from "react";
 import dynamic from "next/dynamic";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
-// three와 rapier 번들을 첫 HTML과 텍스트가 기다리지 않게 한다
+// three 번들을 첫 HTML과 텍스트가 기다리지 않게 한다
 const Scene = dynamic(() => import("@/components/scene/Scene"), {
   ssr: false,
 });
