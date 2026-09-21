@@ -27,7 +27,7 @@ export default function ProjectCard({
       onPointerLeave={clearAccent}
       onFocus={applyAccent}
       onBlur={clearAccent}
-      className="group border-t border-line pt-8 pb-4 md:grid md:grid-cols-[9rem_1fr] md:gap-8 md:pt-10"
+      className="group border-t border-line py-8 md:grid md:grid-cols-[9rem_1fr] md:gap-8 md:py-10"
       style={{ "--project-accent": project.accentColor } as React.CSSProperties}
     >
       {/* 왼쪽 열은 기간처럼 데이터로 읽히는 정보다. 제목과 같은 줄에서 시작한다 */}
