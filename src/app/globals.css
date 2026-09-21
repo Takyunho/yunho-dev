@@ -127,6 +127,11 @@ body {
   }
 }
 
+/* Tailwind 4는 버튼의 커서를 브라우저 기본값(화살표)으로 둔다. 누를 수 있는 자리는 손가락으로 보이게 되돌린다 */
+button:not(:disabled) {
+  cursor: pointer;
+}
+
 :focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 3px;

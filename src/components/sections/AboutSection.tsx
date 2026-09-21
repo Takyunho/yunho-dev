@@ -8,6 +8,7 @@ import { PROFILE } from "@/content/profile";
 const PROFILE_FACTS = [
   { label: "Role", value: PROFILE.role },
   { label: "Company", value: PROFILE.company },
+  { label: "Since", value: PROFILE.careerSince },
   { label: "Based in", value: PROFILE.location },
 ];
 
@@ -51,7 +52,7 @@ export default function AboutSection() {
 
         <dl
           data-reveal
-          className="mt-12 grid grid-cols-1 gap-6 border-t border-line pt-6 sm:grid-cols-3"
+          className="mt-12 grid grid-cols-2 gap-x-6 gap-y-7 border-t border-line pt-6"
         >
           {PROFILE_FACTS.map((profileFact) => (
             <div key={profileFact.label}>

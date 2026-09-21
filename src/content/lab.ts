@@ -8,6 +8,7 @@ export interface LabItem {
 
 const GITHUB_BASE_URL = "https://github.com/Takyunho";
 
+// 제품에 넣기 전에 따로 만들어 본 것들이다. 여기서 확인한 방식이 실제 업무로 이어진 경우도 있다
 export const LAB_ITEMS: LabItem[] = [
   {
     name: "yunho-dev",
@@ -18,7 +19,7 @@ export const LAB_ITEMS: LabItem[] = [
   },
   {
     name: "TypeScript-Study",
-    description: "TypeScript 공부용 저장소",
+    description: "타입으로 도메인을 좁히는 방법을 정리한 저장소",
     language: "TypeScript",
     year: "2026",
     url: `${GITHUB_BASE_URL}/TypeScript-Study`,
@@ -26,35 +27,36 @@ export const LAB_ITEMS: LabItem[] = [
   {
     name: "i18n",
     description:
-      "react-i18next 다국어 환경과 번역 키 추출, t() 래핑 스크립트 실험",
+      "번역 키를 코드에서 자동으로 뽑아내는 실험. 이 방식을 다듬어 실제 제품의 다국어 작업에 적용했다",
     language: "JavaScript",
     year: "2025",
     url: `${GITHUB_BASE_URL}/i18n`,
   },
   {
     name: "onebite-books",
-    description: "Next.js 학습 프로젝트",
+    description: "Next.js의 렌더링 방식을 예제로 익힌 학습 프로젝트",
     language: "TypeScript",
     year: "2025",
     url: `${GITHUB_BASE_URL}/onebite-books`,
   },
   {
     name: "React-Flow",
-    description: "reactflow 라이브러리로 노드 기반 UI를 실험한 저장소",
+    description:
+      "노드 기반 UI를 처음 만져 본 저장소. 이후 제품의 시나리오 에디터로 이어졌다",
     language: "JavaScript",
     year: "2023",
     url: `${GITHUB_BASE_URL}/React-Flow`,
   },
   {
     name: "vue3-webpack-template",
-    description: "Vue 3와 webpack 기본 템플릿",
+    description: "Vue 3와 webpack으로 직접 짠 기본 템플릿",
     language: "JavaScript",
     year: "2023",
     url: `${GITHUB_BASE_URL}/vue3-webpack-template`,
   },
   {
     name: "ARAndVR",
-    description: "AR과 VR 예제, 테스트 파일 모음",
+    description: "웹에서 AR과 VR을 어디까지 할 수 있는지 살펴본 예제 모음",
     language: "JavaScript",
     year: "2022",
     url: `${GITHUB_BASE_URL}/ARAndVR`,
@@ -62,7 +64,7 @@ export const LAB_ITEMS: LabItem[] = [
   {
     name: "Study",
     description:
-      "JavaScript, React, Vue, Three.js, 번들러 등 공부한 것을 기록한 저장소",
+      "JavaScript, React, Vue, Three.js, 번들러를 공부하며 기록한 저장소",
     language: "JavaScript",
     year: "2021",
     url: `${GITHUB_BASE_URL}/Study`,

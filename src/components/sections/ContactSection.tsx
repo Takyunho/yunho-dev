@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Link from "next/link";
 import ExternalLink from "@/components/layout/ExternalLink";
 import { useRevealOnScroll } from "@/hooks/useRevealOnScroll";
 import { PROFILE } from "@/content/profile";
@@ -16,7 +17,7 @@ export default function ContactSection() {
     <section
       id="contact"
       ref={sectionRef}
-      className="flex min-h-svh flex-col justify-between px-5 pt-32 pb-8 md:px-10"
+      className="flex min-h-svh flex-col justify-between px-5 pt-32 md:px-10"
     >
       <div>
         <h2
@@ -26,7 +27,15 @@ export default function ContactSection() {
           Let&apos;s talk
         </h2>
 
-        <div data-reveal className="mt-10 flex flex-col items-start gap-3">
+        <p
+          data-reveal
+          className="mt-8 max-w-(--measure) text-(length:--text-body) leading-relaxed text-muted md:text-lg"
+        >
+          새로운 제품을 만드는 자리나 함께 일해 볼 만한 이야기라면 언제든
+          환영합니다.
+        </p>
+
+        <div data-reveal className="mt-8 flex flex-col items-start gap-3">
           <a
             href={`mailto:${PROFILE.email}`}
             className="text-link text-2xl font-medium tracking-tight text-fg md:text-4xl"
@@ -41,12 +50,40 @@ export default function ContactSection() {
         </div>
       </div>
 
-      {/* 웅덩이 위에 놓이므로 반투명 띠를 깔아 읽히게 한다 */}
-      <footer className="label flex flex-col gap-1 border-t border-line bg-(--header-shade) px-1 pt-3 md:flex-row md:justify-between">
-        <p>
-          © {CURRENT_YEAR} {PROFILE.nameEnglish}
-        </p>
-        <p>Built with Next.js, React Three Fiber</p>
+      {/* 웅덩이 위에 놓인다. 반투명 띠를 깔면 그 위 경계가 선처럼 보여서, 화면 아래로 갈수록 짙어지는
+          그라데이션으로 바탕을 만든다. 좌우 여백 바깥까지 덮도록 음수 여백으로 넓힌다 */}
+      <footer className="label relative -mx-5 px-5 pt-24 pb-7 md:-mx-10 md:px-10">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 bg-linear-to-b from-transparent to-(--header-shade)"
+        />
+        <div className="relative flex items-center justify-between gap-6">
+          <p>
+            © <span className="tabular-nums">{CURRENT_YEAR}</span>{" "}
+            {PROFILE.nameEnglish}
+          </p>
+          {/* 헤더의 유리 알약과 같은 재질로 두어 화면 위아래가 같은 언어로 읽히게 한다 */}
+          <Link
+            href="/#hero"
+            aria-label="맨 위로"
+            className="liquid-glass group relative flex size-10 shrink-0 items-center justify-center rounded-full text-fg transition-colors duration-(--dur-short) hover:text-accent"
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+              className="transition-transform duration-(--dur-short) group-hover:-translate-y-0.5"
+            >
+              <path d="M12 19V5M5 12l7-7 7 7" />
+            </svg>
+          </Link>
+        </div>
       </footer>
     </section>
   );
