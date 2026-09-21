@@ -144,10 +144,12 @@ export default function WorkSection() {
             })}
           </div>
 
+          {/* 고르는 값이 둘뿐이라 세그먼트 컨트롤로 둔다. 무엇을 고를 수 있는지가 한눈에 보인다.
+              label 클래스는 색을 직접 정하므로 여기서는 크기와 색 유틸리티를 따로 쓴다 */}
           <div
             role="group"
             aria-label="보기 방식"
-            className="flex shrink-0 items-baseline gap-x-4"
+            className="flex shrink-0 items-center self-start rounded-full border border-line p-0.5 md:self-auto"
           >
             {VIEW_MODES.map((mode) => {
               const isSelected = mode.id === viewMode;
@@ -157,8 +159,10 @@ export default function WorkSection() {
                   type="button"
                   aria-pressed={isSelected}
                   onClick={() => setViewMode(mode.id)}
-                  className={`label whitespace-nowrap decoration-1 underline-offset-[0.3em] transition-colors duration-(--dur-short) hover:underline ${
-                    isSelected ? "font-semibold text-fg" : "hover:text-fg"
+                  className={`rounded-full px-3 py-1 text-(length:--text-label) whitespace-nowrap transition-colors duration-(--dur-short) ${
+                    isSelected
+                      ? "bg-surface font-medium text-fg"
+                      : "text-muted hover:text-fg"
                   }`}
                 >
                   {mode.label}
