@@ -49,8 +49,9 @@ export default function ProjectGridCard({
       </h3>
       <p className="label mt-1">{project.role}</p>
 
-      {/* 칸마다 높이가 들쭉날쭉하지 않게 요약은 세 줄에서 자른다 */}
-      <p className="mt-3 line-clamp-3 text-(length:--text-label) leading-relaxed text-muted">
+      {/* 칸 안의 다른 글자가 모두 라벨 크기라 설명만 한 단계 키워 먼저 읽히게 한다.
+          칸마다 높이가 들쭉날쭉하지 않게 세 줄에서 자른다 */}
+      <p className="mt-3 line-clamp-3 text-[0.9375rem] leading-relaxed text-muted">
         {project.summary}
       </p>
 
