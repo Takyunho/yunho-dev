@@ -9,16 +9,34 @@ export type ProjectCategoryId =
 export interface ProjectCategory {
   id: ProjectCategoryId;
   label: string;
-  // 카드에 hover하면 3D 오브젝트의 accent 색이 분류별 이 색으로 바뀐다
-  accentColor: string;
 }
 
 export const PROJECT_CATEGORIES: ProjectCategory[] = [
-  { id: "product", label: "자사 제품", accentColor: "#4f7cff" },
-  { id: "platform", label: "사내 플랫폼", accentColor: "#00b89c" },
-  { id: "rnd", label: "국가 R&D", accentColor: "#a855f7" },
-  { id: "client", label: "고객사", accentColor: "#ff7a1a" },
-  { id: "demo", label: "전시와 데모", accentColor: "#f0b429" },
+  { id: "product", label: "자사 제품" },
+  { id: "platform", label: "사내 플랫폼" },
+  { id: "rnd", label: "국가 R&D" },
+  { id: "client", label: "고객사" },
+  { id: "demo", label: "전시와 데모" },
+];
+
+// 색상환을 고르게 돌며 고른 색이다. 밝기와 선명도를 비슷하게 맞춰 두 테마에서 모두 읽힌다
+const ACCENT_PALETTE = [
+  "#ff7a1a", // 주황
+  "#4f7cff", // 파랑
+  "#3fbf6f", // 초록
+  "#e05fc0", // 자주
+  "#f0b429", // 노랑
+  "#28b4d8", // 하늘
+  "#a855f7", // 보라
+  "#b4d334", // 연두
+  "#f2557a", // 분홍
+  "#1fbfa8", // 청록
+  "#7c6bf0", // 남보라
+  "#ef5b4c", // 주홍
+  "#5bb890", // 풀색
+  "#c98b3a", // 황토
+  "#39c0ff", // 하늘빛
+  "#d46ef0", // 연보라
 ];
 
 export interface Project {
@@ -31,10 +49,14 @@ export interface Project {
   summary: string;
   techStack: string[];
   links: ProjectLink[];
+  // 카드에 마우스를 올리면 3D 오브젝트와 카드의 강조색이 이 색이 된다
+  accentColor: string;
 }
 
+type ProjectSeed = Omit<Project, "accentColor">;
+
 // 최근 시작한 순서다. 고객사와 기관의 실명은 업종으로 바꿔 적는다
-export const PROJECTS: Project[] = [
+const PROJECT_SEEDS: ProjectSeed[] = [
   {
     id: "power-equipment-ai",
     title: "전력설비 AI 안전진단과 통합관제",
@@ -247,3 +269,10 @@ export const PROJECTS: Project[] = [
     links: [],
   },
 ];
+
+// 분류별로 묶으면 다섯 가지 색만 돌아간다. 목록 순서대로 색을 돌려 옆자리끼리 같은 색이 나오지 않게 한다.
+// 난수를 쓰면 서버와 화면이 다른 색을 그려 hydration이 어긋난다
+export const PROJECTS: Project[] = PROJECT_SEEDS.map((seed, seedIndex) => ({
+  ...seed,
+  accentColor: ACCENT_PALETTE[seedIndex % ACCENT_PALETTE.length],
+}));

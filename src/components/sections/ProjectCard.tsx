@@ -20,7 +20,7 @@ export default function ProjectCard({
   const titleClassName =
     "text-xl leading-snug font-semibold tracking-tight text-fg transition-colors duration-(--dur-short) group-hover:text-(--project-accent) md:text-2xl";
   const applyAccent = () => {
-    sceneState.accentOverride = category.accentColor;
+    sceneState.accentOverride = project.accentColor;
   };
   const clearAccent = () => {
     sceneState.accentOverride = null;
@@ -34,7 +34,7 @@ export default function ProjectCard({
       onBlur={clearAccent}
       className="group grid grid-cols-1 gap-x-8 gap-y-3 border-t border-line py-7 md:grid-cols-[16rem_1fr_auto] md:py-8"
       style={
-        { "--project-accent": category.accentColor } as React.CSSProperties
+        { "--project-accent": project.accentColor } as React.CSSProperties
       }
     >
       {/* 왼쪽 열은 언제 무엇으로 했는지다. 오른쪽 본문과 같은 줄에서 시작한다 */}

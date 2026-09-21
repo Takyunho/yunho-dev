@@ -16,7 +16,7 @@ export default function ProjectGridCard({
   detailHref,
 }: ProjectGridCardProps) {
   const applyAccent = () => {
-    sceneState.accentOverride = category.accentColor;
+    sceneState.accentOverride = project.accentColor;
   };
   const clearAccent = () => {
     sceneState.accentOverride = null;
@@ -30,7 +30,7 @@ export default function ProjectGridCard({
       onBlur={clearAccent}
       className="group flex h-full flex-col border-t border-line pt-5"
       style={
-        { "--project-accent": category.accentColor } as React.CSSProperties
+        { "--project-accent": project.accentColor } as React.CSSProperties
       }
     >
       <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">

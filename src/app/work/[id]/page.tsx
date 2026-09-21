@@ -65,7 +65,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         <div
           className="mt-10 border-t border-line pt-8"
           style={
-            { "--project-accent": category.accentColor } as React.CSSProperties
+            { "--project-accent": project.accentColor } as React.CSSProperties
           }
         >
           <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
