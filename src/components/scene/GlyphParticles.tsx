@@ -18,10 +18,7 @@ import {
   STREAM_DEPTH_NEAR,
   STREAM_HALF_WIDTH,
 } from "@/components/scene/glyphShaders";
-import {
-  PART_COUNT,
-  THEME_ONLY_KEY,
-} from "@/components/scene/partDefinitions";
+import { PART_COUNT, THEME_ONLY_KEY } from "@/components/scene/partDefinitions";
 import {
   FIELD_OF_VIEW,
   computeViewportUnits,
@@ -372,7 +369,12 @@ export default function GlyphParticles({
       sceneState.layout.contentMarginPixels,
       viewport,
     );
-    samplePhases(sceneState.sectionProgress, profile, phases);
+    samplePhases(
+      sceneState.sectionProgress,
+      sceneState.aboutArrivalProgress,
+      profile,
+      phases,
+    );
     computeClumpCenter(
       phases,
       viewport,

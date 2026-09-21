@@ -44,11 +44,13 @@ interface PhaseStops {
 
 // 옆 배치는 부품이 여백에 있어서 Lab 목록이 아직 화면에 있을 때 Lab과 Contact 사이 빈 줄을 따라 건너갈 수 있다.
 // 그래서 다시 뭉치기를 일찍 끝내고, 풀려서 고이는 구간을 길게 둔다
+// 모이기부터 입자가 사라지기까지는 About에 도착하는 진행도에 대한 비율이다. 헤더의 About을 누르면 섹션 위쪽이
+// 화면 위쪽에 맞춰지는데, 그 위치에서 부품이 다 굳어 있어야 한다
 const SIDE_STOPS: PhaseStops = {
-  morph: [0.2, 0.9],
-  clumpShift: [0.2, 0.95],
-  solid: [0.75, 1.05],
-  fadeOut: [0.9, 1.2],
+  morph: [0.2, 0.8],
+  clumpShift: [0.2, 0.85],
+  solid: [0.65, 0.95],
+  fadeOut: [0.75, 1],
   fadeIn: [4.7, 4.84],
   spread: [1.1, 1.6],
   regather: [4.15, 4.5],
@@ -78,6 +80,15 @@ const MOBILE_STOPS: PhaseStops = {
   dissolve: [4.76, 4.94],
   pool: [4.78, 4.99],
 };
+
+// 휴대폰의 구간은 About에 닿기 한참 전에 끝나는 절대값이라 비율로 다루지 않는다
+const USES_ARRIVAL_RATIO: Record<SceneProfile, boolean> = {
+  side: true,
+  stacked: true,
+  mobile: false,
+};
+// About이 화면보다 아주 길어도 연출이 히어로 안에서 너무 급하게 끝나지 않게 하는 하한
+const MIN_ARRIVAL_PROGRESS = 0.6;
 
 const STOPS_BY_PROFILE: Record<SceneProfile, PhaseStops> = {
   side: SIDE_STOPS,
@@ -120,22 +131,27 @@ function smooth(value: number): number {
 // 프레임마다 객체를 새로 만들지 않도록 결과를 output에 덮어쓴다
 export function samplePhases(
   sectionProgress: number,
+  aboutArrivalProgress: number,
   profile: SceneProfile,
   output: ScenePhases,
 ): ScenePhases {
   const stops = STOPS_BY_PROFILE[profile];
+  const introProgress = USES_ARRIVAL_RATIO[profile]
+    ? sectionProgress /
+      Math.min(Math.max(aboutArrivalProgress, MIN_ARRIVAL_PROGRESS), 1)
+    : sectionProgress;
   const regather = smooth(range(sectionProgress, stops.regather));
   const dissolve = smooth(range(sectionProgress, stops.dissolve));
 
-  output.morph = range(sectionProgress, stops.morph);
+  output.morph = range(introProgress, stops.morph);
   output.clumpShift = stops.clumpShift
-    ? smooth(range(sectionProgress, stops.clumpShift))
+    ? smooth(range(introProgress, stops.clumpShift))
     : 0;
-  output.solid = smooth(range(sectionProgress, stops.solid)) * (1 - dissolve);
+  output.solid = smooth(range(introProgress, stops.solid)) * (1 - dissolve);
   output.particleFade = Math.min(
     1,
     1 -
-      smooth(range(sectionProgress, stops.fadeOut)) +
+      smooth(range(introProgress, stops.fadeOut)) +
       smooth(range(sectionProgress, stops.fadeIn)),
   );
   output.spread = smooth(range(sectionProgress, stops.spread)) * (1 - regather);

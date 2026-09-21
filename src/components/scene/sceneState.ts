@@ -31,6 +31,9 @@ export interface SceneLayoutMeasurements {
 export const sceneState = {
   // 0은 hero 중앙, 1은 about 중앙처럼 섹션 중앙을 정수로 하는 연속 값
   sectionProgress: 0,
+  // About 섹션의 위쪽이 화면 위쪽에 맞춰졌을 때(헤더의 About을 눌러 도착하는 위치)의 sectionProgress.
+  // 섹션이 화면보다 길수록 1보다 작아진다
+  aboutArrivalProgress: 1,
   // NDC 좌표 (-1~1, 위쪽이 +y)
   pointer: { x: 0, y: 0 },
   pointerActive: false,

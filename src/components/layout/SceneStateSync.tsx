@@ -28,8 +28,11 @@ function measureSectionCenters(): number[] {
   });
 }
 
-function computeSectionProgress(sectionCenters: number[]): number {
-  const viewportCenter = window.scrollY + window.innerHeight / 2;
+function computeSectionProgress(
+  sectionCenters: number[],
+  scrollY: number,
+): number {
+  const viewportCenter = scrollY + window.innerHeight / 2;
   const lastIndex = sectionCenters.length - 1;
 
   if (viewportCenter <= sectionCenters[0]) return 0;
@@ -123,10 +126,20 @@ export default function SceneStateSync() {
     let disposed = false;
 
     const updateSectionProgress = () => {
-      sceneState.sectionProgress = computeSectionProgress(sectionCenters);
+      sceneState.sectionProgress = computeSectionProgress(
+        sectionCenters,
+        window.scrollY,
+      );
     };
     const remeasure = () => {
       sectionCenters = measureSectionCenters();
+      const aboutSection = document.getElementById("about");
+      if (aboutSection) {
+        sceneState.aboutArrivalProgress = computeSectionProgress(
+          sectionCenters,
+          aboutSection.getBoundingClientRect().top + window.scrollY,
+        );
+      }
       measureLayout();
       updateSectionProgress();
     };

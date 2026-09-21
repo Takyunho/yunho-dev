@@ -106,7 +106,12 @@ export default function UiParts({
     );
     const currentPhases = isFrozen
       ? REDUCED_MOTION_PHASES
-      : samplePhases(sceneState.sectionProgress, profile, phases);
+      : samplePhases(
+          sceneState.sectionProgress,
+          sceneState.aboutArrivalProgress,
+          profile,
+          phases,
+        );
     const scrollY = window.scrollY;
     computeClumpCenter(
       currentPhases,
