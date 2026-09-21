@@ -55,7 +55,7 @@ pnpm build
 | `src/components/sections/` | Hero, About, Stack, Work, Lab, Contact 섹션                                                                                             |
 | `src/components/layout/`   | 헤더, 테마 토글, 부드러운 스크롤, 장면 상태 동기화, 안개 층                                                                |
 | `src/components/scene/`    | 3D 장면 (코드 글자 입자, UI 부품, 배치 규칙, 수면 시뮬레이션, 조명, 연출 타임라인)                                                      |
-| `src/hooks/`               | 미디어 쿼리, 동작 줄이기 감지, 스크롤 진입 애니메이션, 파도를 따라 움직이는 글자                                                        |
+| `src/hooks/`               | 미디어 쿼리, 동작 줄이기 감지, 스크롤 진입 애니메이션                                                                                   |
 | `docs/superpowers/`        | 개편 설계 문서와 구현 계획                                                                                                              |
 
 ## 콘텐츠 수정하기
@@ -98,7 +98,7 @@ pnpm build
 - `sectionChoreography.ts`에는 섹션 진행도에 따라 모이기, 굳기, 흩어지기, 다시 뭉치기, 풀리기, 고이기가 일어나는 구간이 부품이 머무는 자리(본문 옆 여백, 문구 사이, 휴대폰)별로 나뉘어 있습니다. 여백에 있던 부품은 Lab 목록과 Contact 제목 사이의 빈 줄을 따라 오른쪽으로 건너간 뒤 섹션과 함께 올라오다가 천천히 풀립니다.
 - `sceneLayout.ts`에는 부품이 흩어질 때의 자리 규칙이 있습니다. 본문 옆 여백이 넓으면 여백 한가운데에 두고, 좁으면(태블릿, 휴대폰, 세로로 긴 창) 섹션 문구 사이 빈 공간에 둘씩 두어 문구를 가리지 않게 합니다. 어느 쪽인지는 미디어 쿼리가 아니라 실제로 잰 여백으로 정합니다.
 - `partDefinitions.ts`에는 부품의 형태와 덩어리 안의 자리, 흩어질 때 향하는 자리가 있습니다.
-- `waveSurface.ts`에는 마지막 구간의 파도를 만드는 1차원 수면 시뮬레이션이 있습니다. Contact의 글자도 이 높이를 읽어 함께 출렁입니다.
+- `waveSurface.ts`에는 마지막 구간의 파도를 만드는 1차원 수면 시뮬레이션이 있습니다. 웅덩이에 떨어지는 점(`PoolDrops.tsx`)도 이 높이를 읽어 물에 닿는 때를 정합니다.
 - `themePalette.ts`에는 테마별 부품 재질색, 입자색, 조명 강도가 있습니다. 라이트 모드는 입자를 잉크처럼 일반 혼합으로 그립니다. 여기의 `accent` 값은 `src/app/tokens.css`의 `--accent`(OKLCH)를 hex로 바꾼 값이라, 한쪽을 바꾸면 다른 쪽도 맞춰야 합니다.
 
 섹션을 추가하거나 순서를 바꿀 때는 `sceneState.ts`의 `SECTION_IDS`와 섹션 요소의 `id`를 함께 맞추고, `sectionChoreography.ts`의 구간과 `SceneStateSync.tsx`의 문구 사이 빈 공간 목록을 다시 정합니다.

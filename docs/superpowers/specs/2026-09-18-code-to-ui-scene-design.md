@@ -107,10 +107,7 @@ src/components/layout/
   SceneStateSync.tsx     스크롤, 포인터, 레이아웃 측정
   SmoothScroll.tsx       Lenis 옵션 변경
 src/components/sections/
-  ContactSection.tsx     WaveText 사용, 푸터 배경
-  WaveText.tsx           문자열을 단어와 글자 span으로 렌더링
-src/hooks/
-  useWaveText.ts         글자 자리 측정과 매 틱 transform 적용
+  ContactSection.tsx     푸터 배경
 ```
 
 삭제하는 파일은 `PhysicsCluster.tsx`, `PointerCollider.tsx`, `clusterBodies.ts`다.
@@ -291,14 +288,6 @@ CPU에서 64칸 1차원 수면을 계산해 높이와 속도를 uniform 배열�
 
 터치 스크롤 중에는 pointermove가 오지 않고 pointercancel이 온다. 그래서 터치에서는 pointerdown(탭)이 그 자리에 에너지 1을 넣어 파도를 일으킨다.
 
-## 글자 출렁임 (WaveText, useWaveText)
-
-- `WaveText`는 문자열을 받아 단어를 `inline-block nowrap` span으로, 글자를 `inline-block` span으로 서버 렌더링한다. 원문은 `sr-only` span으로 두고 글자 span은 `aria-hidden` 컨테이너 안에 있다. Contact의 제목 "Let's talk"와 이메일 링크의 글자에 쓴다.
-- `useWaveText`는 글자 span의 문서 기준 가로 중심과 밑선을 리사이즈, `document.fonts.ready`, 섹션 `ResizeObserver` 때 변형을 지운 상태로 재 둔다. 매 프레임 레이아웃을 읽지 않기 위해서다.
-- `gsap.ticker`마다 `pool > 0`이면 글자마다 자기 x의 수면 높이를 `waveSurface`에서 읽어 `translate3d`와 `rotate`를 적용한다. 들림 = 물결 높이(평소 대비) × (0.05 + 0.25 × 근접도)이고 근접도는 수면이 밑선 3단위 안으로 오면 1까지 오른다. 기울기 = `atan(수면 기울기) × 0.5 × 근접도`, 최대 0.35rad. CSS 회전은 시계 방향이 양수라 부호를 뒤집는다.
-- 잠긴 깊이만큼 띄우는 항은 두지 않는다. 아래 줄이 위 줄까지 밀려 올라가 겹쳤기 때문이다. 같은 x의 글자는 줄에 상관없이 비슷하게 움직여 줄 간격이 유지된다.
-- `pool`이 0이 되면 변형을 한 번 지운다.
-
 Contact의 푸터(저작권, "Built with")는 웅덩이 위에 놓인다. 읽히도록 배경색 60% 반투명 띠를 깐다. 문구는 "Built with Next.js, React Three Fiber"로 바꾼다.
 
 ## 안개 층과 히어로 가독성
@@ -346,7 +335,7 @@ Contact의 푸터(저작권, "Built with")는 웅덩이 위에 놓인다. 읽히
 
 - `about`, `stack`, `work`, `lab`, `contact` 섹션의 문구 블록에 `data-scene-text`를 단다. 본문 여백은 Stack 문구 블록의 왼쪽 가장자리(`getBoundingClientRect().left`)로 잰다. 섹션의 padding 안쪽, 즉 글자가 실제로 시작하는 위치다.
 - 히어로 문구 블록에 제목 가림 배경을 더한다.
-- Contact 제목과 이메일을 `WaveText`로 바꾸고 푸터에 반투명 배경을 준다.
+- Contact 푸터에 반투명 배경을 준다.
 - `README.md`의 3D 절과 기술 스택 표를 실제 장면 구성에 맞춘다. 장면이 쓰지 않는 Rapier는 표에서 빼고 입자와 부품, 배치 규칙, 파도 설명을 넣는다. 패키지가 남아 있는 것과 무관하게 README는 실제로 쓰는 기술만 적는다.
 
 ## 의존성
