@@ -1,0 +1,63 @@
+/* Hallmark · genre: editorial · macrostructure: Long Document · theme: custom-tuned (cobalt on cool paper) · enrichment: existing 3D scene · nav: N9 · footer: Ft2
+ * audience: 채용 담당자, 개발 팀 리더, 개발자 · use: 커리어와 프로젝트 확인 · tone: editorial + technical, 가독성 우선
+ * display: Instrument Serif · body: Geist + Pretendard · outlier: Geist Mono (기간과 연도 같은 데이터에만)
+ * pre-emit critique: P4 H4 E4 S4 R5 V4
+ */
+:root {
+  /* 모든 중립색은 강조색과 같은 색상(255)으로 아주 약하게 물들인다 */
+  --bg: oklch(96.5% 0.006 255);
+  --surface: oklch(99% 0.003 255);
+  --fg: oklch(19% 0.012 255);
+  --muted: oklch(40% 0.014 255);
+  --line: oklch(84% 0.008 255);
+  --accent: oklch(47% 0.2 262);
+  --accent-ink: oklch(98% 0.005 255);
+  --focus: oklch(47% 0.2 262);
+  --atmosphere-a: oklch(47% 0.2 262 / 0.08);
+  --atmosphere-b: oklch(60% 0.1 200 / 0.08);
+  --atmosphere-vignette: transparent;
+  --title-shade: oklch(96.5% 0.006 255 / 0.85);
+  --header-shade: oklch(96.5% 0.006 255 / 0.9);
+  /* 헤더의 유리. 바탕은 거의 비우고 얇은 빛 테두리와 옅은 안쪽 빛으로 유리를 만든다 */
+  --glass-inner-glow: oklch(100% 0 0 / 0.85);
+  /* 밝은 배경에서도 테두리는 흰빛이다. 흰 선만으로는 보이지 않아서 바로 바깥의 옅은 윤곽선과 그림자가 선을 드러낸다 */
+  --glass-edge: oklch(100% 0 0 / 1);
+  --glass-edge-low: oklch(100% 0 0 / 0.7);
+  --glass-outline: oklch(30% 0.03 255 / 0.1);
+  --glass-shadow: oklch(30% 0.03 255 / 0.2);
+  --glass-shadow-near: oklch(30% 0.03 255 / 0.12);
+  /* 마스크는 불투명 여부만 본다 */
+  --mask-solid: oklch(0% 0 0);
+
+  --text-label: 0.8125rem;
+  --text-body: 1.0625rem;
+  --measure: 62ch;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-short: 220ms;
+  --dur-reveal: 600ms;
+}
+
+[data-theme="dark"] {
+  --bg: oklch(14% 0.012 255);
+  --surface: oklch(18% 0.014 255);
+  --fg: oklch(94% 0.006 255);
+  --muted: oklch(76% 0.012 255);
+  --line: oklch(32% 0.014 255);
+  --accent: oklch(70% 0.14 255);
+  --accent-ink: oklch(14% 0.012 255);
+  --focus: oklch(76% 0.14 255);
+  --atmosphere-a: oklch(55% 0.1 200 / 0.4);
+  --atmosphere-b: oklch(50% 0.14 255 / 0.3);
+  --atmosphere-vignette: oklch(8% 0.01 255 / 0.4);
+  --title-shade: oklch(14% 0.012 255 / 0.78);
+  --header-shade: oklch(14% 0.012 255 / 0.88);
+  --glass-inner-glow: oklch(100% 0 0 / 0.07);
+  --glass-edge: oklch(100% 0 0 / 0.62);
+  --glass-edge-low: oklch(100% 0 0 / 0.2);
+  --glass-outline: oklch(0% 0 0 / 0);
+  --glass-shadow: oklch(5% 0.01 255 / 0.45);
+  --glass-shadow-near: oklch(5% 0.01 255 / 0.2);
+}

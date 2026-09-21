@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import ThemeProvider from "@/components/layout/ThemeProvider";
 import { PROFILE } from "@/content/profile";
 import "./globals.css";
@@ -12,6 +12,13 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+// 큰 제목 전용 세리프. 굵기가 하나뿐이라 크기로 위계를 만든다
+const instrumentSerif = Instrument_Serif({
+  variable: "--font-instrument-serif",
+  subsets: ["latin"],
+  weight: "400",
 });
 
 const SITE_TITLE = "탁윤호 | Frontend Engineer";
@@ -52,7 +59,7 @@ export default function RootLayout({
     // next-themes가 hydration 전에 data-theme을 써넣기 때문에 경고를 끈다
     <html lang="ko" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} font-sans antialiased`}
       >
         <noscript>
           <style>{`.line-mask > span { transform: none; }`}</style>

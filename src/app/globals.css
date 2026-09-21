@@ -1,31 +1,6 @@
 @import "tailwindcss";
 @import "pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css";
-
-:root {
-  --bg: #f0f1f5;
-  --surface: #ffffff;
-  --fg: #0d0e12;
-  --muted: #5b6070;
-  --accent: #1a2ffb;
-  --line: rgba(13, 14, 18, 0.12);
-  --atmosphere-a: rgba(26, 47, 251, 0.1);
-  --atmosphere-b: rgba(0, 150, 170, 0.1);
-  --atmosphere-vignette: transparent;
-  --title-shade: rgba(240, 241, 245, 0.85);
-}
-
-[data-theme="dark"] {
-  --bg: #0a0b0f;
-  --surface: #12141a;
-  --fg: #eceef3;
-  --muted: #8a90a2;
-  --accent: #5b6cff;
-  --line: rgba(236, 238, 243, 0.14);
-  --atmosphere-a: rgba(30, 138, 150, 0.5);
-  --atmosphere-b: rgba(88, 66, 176, 0.44);
-  --atmosphere-vignette: rgba(0, 0, 0, 0.35);
-  --title-shade: rgba(10, 11, 15, 0.78);
-}
+@import "./tokens.css";
 
 @theme inline {
   --color-bg: var(--bg);
@@ -34,6 +9,8 @@
   --color-muted: var(--muted);
   --color-accent: var(--accent);
   --color-line: var(--line);
+  --color-accent-ink: var(--accent-ink);
+  --font-display: var(--font-display-stack);
   --font-sans:
     var(--font-geist-sans), "Pretendard Variable", Pretendard, system-ui,
     sans-serif;
@@ -59,19 +36,105 @@ html.lenis body {
 }
 
 body {
+  /* next/font 변수가 body에 걸리므로 그 아래에서 정의해야 값이 풀린다 */
+  --font-display-stack:
+    var(--font-instrument-serif), "Pretendard Variable", Pretendard, ui-serif,
+    Georgia, serif;
   background-color: var(--bg);
   color: var(--fg);
-  overflow-x: hidden;
+  overflow-x: clip;
   /* 한글이 단어 중간에서 줄바꿈되지 않게 한다 */
   word-break: keep-all;
+  font-size: var(--text-body);
+  line-height: 1.65;
   transition:
-    background-color 0.6s ease,
-    color 0.6s ease;
+    background-color 0.6s var(--ease-in-out),
+    color 0.6s var(--ease-in-out);
+}
+
+/* 큰 제목은 세리프 디스플레이로 짠다. 굵기 대신 크기와 서체 대비로 위계를 만든다 */
+.display {
+  font-family: var(--font-display-stack);
+  font-weight: 400;
+  font-style: normal;
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
+/* 기간, 연도, 분류처럼 데이터로 읽히는 작은 글자 */
+.label {
+  font-size: var(--text-label);
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+/* 밑줄로 말하는 텍스트 링크. 알약 버튼 대신 쓴다 */
+.text-link {
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.3em;
+  transition:
+    color var(--dur-short) var(--ease-out),
+    text-decoration-color var(--dur-short) var(--ease-out);
+}
+
+.text-link:hover {
+  color: var(--accent);
+  text-decoration-color: var(--accent);
+}
+
+/* 유리 알약. 바탕은 거의 비우고 뒤를 살짝 흐리기만 한다. 유리로 읽히게 하는 것은 전체를 두르는 얇은 빛 테두리다.
+   -webkit- 접두사 선언을 직접 같이 쓰면 빌드 도구가 표준 속성을 지우므로 표준 속성만 쓴다 */
+/* position은 여기서 정하지 않는다. 레이어 밖의 규칙이라 Tailwind의 fixed를 덮어쓴다. 쓰는 쪽에서 relative나 fixed를 붙여 ::before의 기준을 만든다 */
+.liquid-glass {
+  isolation: isolate;
+  /* 바탕은 칠하지 않는다. 채움이 있으면 유리 위에 판이 한 겹 더 얹힌 것처럼 보인다 */
+  backdrop-filter: blur(16px) saturate(160%);
+  box-shadow:
+    inset 0 0 16px var(--glass-inner-glow),
+    0 0 0 1px var(--glass-outline),
+    0 1px 3px var(--glass-shadow-near),
+    0 10px 28px -10px var(--glass-shadow);
+}
+
+/* 빛 테두리. 왼쪽 위와 오른쪽 아래가 밝고 그 사이는 옅다. 테두리 두께만 남기려고 안쪽을 마스크로 뚫는다 */
+.liquid-glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  padding: 1px;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    var(--glass-edge),
+    var(--glass-edge-low) 38%,
+    var(--glass-edge-low) 62%,
+    var(--glass-edge)
+  );
+  mask:
+    linear-gradient(var(--mask-solid) 0 0) content-box exclude,
+    linear-gradient(var(--mask-solid) 0 0);
+  pointer-events: none;
+}
+
+/* backdrop-filter가 없는 브라우저에서는 읽히도록 불투명한 띠로 바꾼다 */
+@supports not (backdrop-filter: blur(1px)) {
+  .liquid-glass {
+    background: var(--header-shade);
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
 }
 
 ::selection {
   background: var(--accent);
-  color: #ffffff;
+  color: var(--accent-ink);
 }
 
 /* 제목을 줄 단위로 가렸다가 아래에서 밀어 올리는 마스크 */

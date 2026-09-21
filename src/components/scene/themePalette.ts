@@ -20,18 +20,18 @@ export interface ScenePalette {
   ambientIntensity: number;
 }
 
-// accent 값은 globals.css의 --accent와 맞춘다
+// accent 값은 tokens.css의 --accent(OKLCH)를 hex로 바꾼 값이다. three가 oklch 문자열을 읽지 못해서 여기만 hex다
 export const SCENE_PALETTES: Record<ThemeName, ScenePalette> = {
   light: {
     neutral: "#ffffff",
     contrast: "#0d0e12",
-    accent: "#1a2ffb",
+    accent: "#0e4ec8",
     highlight: "#84cc16",
     bright: "#ffffff",
-    glow: "#1a2ffb",
+    glow: "#0e4ec8",
     glyphDim: "#3c4f9c",
     glyphBright: "#0b1450",
-    dot: "#1a2ffb",
+    dot: "#0e4ec8",
     additive: false,
     environmentIntensity: 0.9,
     keyLightIntensity: 2.2,
@@ -40,7 +40,7 @@ export const SCENE_PALETTES: Record<ThemeName, ScenePalette> = {
   dark: {
     neutral: "#15171e",
     contrast: "#eceef3",
-    accent: "#5b6cff",
+    accent: "#5fa1f3",
     highlight: "#b4f03a",
     bright: "#eef1f7",
     glow: "#58e6e0",
