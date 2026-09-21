@@ -20,7 +20,11 @@ export default function ProjectCard({
   const titleClassName =
     "text-xl leading-snug font-semibold tracking-tight text-fg transition-colors duration-(--dur-short) group-hover:text-(--project-accent) md:text-2xl";
   const applyAccent = () => {
-    sceneState.accentOverride = project.accentColor;
+    // 3D 부품도 바탕에 맞는 밝기라야 배경에 묻히지 않는다. next-themes가 써 둔 값을 그대로 읽는다
+    const isDarkTheme = document.documentElement.dataset.theme === "dark";
+    sceneState.accentOverride = isDarkTheme
+      ? project.accentColor.dark
+      : project.accentColor.light;
   };
   const clearAccent = () => {
     sceneState.accentOverride = null;
@@ -32,8 +36,14 @@ export default function ProjectCard({
       onPointerLeave={clearAccent}
       onFocus={applyAccent}
       onBlur={clearAccent}
+      data-project-accent
       className="group grid grid-cols-1 gap-x-8 gap-y-3 border-t border-line py-7 md:grid-cols-[16rem_1fr_auto] md:py-8"
-      style={{ "--project-accent": project.accentColor } as React.CSSProperties}
+      style={
+        {
+          "--project-accent-light": project.accentColor.light,
+          "--project-accent-dark": project.accentColor.dark,
+        } as React.CSSProperties
+      }
     >
       {/* 왼쪽 열은 언제 무엇으로 했는지다. 오른쪽 본문과 같은 줄에서 시작한다.
           기간은 숫자라 모노로, 분류는 다섯 값 중 하나라 테두리를 둘러 서로 다른 것으로 읽히게 한다.

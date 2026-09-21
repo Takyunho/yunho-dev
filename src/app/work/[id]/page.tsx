@@ -63,9 +63,13 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         </p>
 
         <div
+          data-project-accent
           className="mt-10 border-t border-line pt-8"
           style={
-            { "--project-accent": project.accentColor } as React.CSSProperties
+            {
+              "--project-accent-light": project.accentColor.light,
+              "--project-accent-dark": project.accentColor.dark,
+            } as React.CSSProperties
           }
         >
           {/* 목록 카드와 같은 표기를 쓴다. 기간은 모노, 분류는 테두리 칩이다 */}

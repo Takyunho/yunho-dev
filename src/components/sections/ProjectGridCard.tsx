@@ -16,7 +16,11 @@ export default function ProjectGridCard({
   detailHref,
 }: ProjectGridCardProps) {
   const applyAccent = () => {
-    sceneState.accentOverride = project.accentColor;
+    // 3D 부품도 바탕에 맞는 밝기라야 배경에 묻히지 않는다. next-themes가 써 둔 값을 그대로 읽는다
+    const isDarkTheme = document.documentElement.dataset.theme === "dark";
+    sceneState.accentOverride = isDarkTheme
+      ? project.accentColor.dark
+      : project.accentColor.light;
   };
   const clearAccent = () => {
     sceneState.accentOverride = null;
@@ -28,8 +32,14 @@ export default function ProjectGridCard({
       onPointerLeave={clearAccent}
       onFocus={applyAccent}
       onBlur={clearAccent}
+      data-project-accent
       className="group flex h-full flex-col border-t border-line pt-5"
-      style={{ "--project-accent": project.accentColor } as React.CSSProperties}
+      style={
+        {
+          "--project-accent-light": project.accentColor.light,
+          "--project-accent-dark": project.accentColor.dark,
+        } as React.CSSProperties
+      }
     >
       {/* 기간은 숫자라 모노로, 분류는 다섯 값 중 하나라 테두리를 둘러 서로 다른 것으로 읽히게 한다.
           강조색은 프로젝트마다 다르므로 분류에는 쓰지 않는다 */}
