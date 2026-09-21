@@ -48,10 +48,33 @@ export default function ContactSection() {
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 bg-linear-to-b from-transparent to-(--header-shade)"
         />
-        <p className="relative">
-          © <span className="tabular-nums">{CURRENT_YEAR}</span>{" "}
-          {PROFILE.nameEnglish}
-        </p>
+        <div className="relative flex items-center justify-between gap-6">
+          <p>
+            © <span className="tabular-nums">{CURRENT_YEAR}</span>{" "}
+            {PROFILE.nameEnglish}
+          </p>
+          {/* 헤더의 유리 알약과 같은 재질로 두어 화면 위아래가 같은 언어로 읽히게 한다 */}
+          <a
+            href="#hero"
+            aria-label="맨 위로"
+            className="liquid-glass group relative flex size-10 shrink-0 items-center justify-center rounded-full text-fg transition-colors duration-(--dur-short) hover:text-accent"
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+              className="transition-transform duration-(--dur-short) group-hover:-translate-y-0.5"
+            >
+              <path d="M12 19V5M5 12l7-7 7 7" />
+            </svg>
+          </a>
+        </div>
       </footer>
     </section>
   );
