@@ -48,13 +48,10 @@ export default function ContactSection() {
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 bg-linear-to-b from-transparent to-(--header-shade)"
         />
-        <div className="relative flex flex-col gap-1 md:flex-row md:items-baseline md:justify-between md:gap-6">
-          <p>
-            © <span className="tabular-nums">{CURRENT_YEAR}</span>{" "}
-            {PROFILE.nameEnglish}
-          </p>
-          <p>Built with Next.js, React Three Fiber</p>
-        </div>
+        <p className="relative">
+          © <span className="tabular-nums">{CURRENT_YEAR}</span>{" "}
+          {PROFILE.nameEnglish}
+        </p>
       </footer>
     </section>
   );
