@@ -39,7 +39,8 @@ export default function HeroSection() {
     <section
       id="hero"
       ref={sectionRef}
-      className="flex min-h-svh flex-col justify-end px-5 pt-28 pb-10 md:px-10 md:pb-14"
+      // 제목 뒤 그라디언트가 좌우로 8%씩 번져 나가므로 여기서 잘라야 문서 폭이 늘지 않는다
+      className="flex min-h-svh flex-col justify-end overflow-x-clip px-5 pt-28 pb-10 md:px-10 md:pb-14"
     >
       <div className="relative flex flex-col gap-8 before:absolute before:-inset-x-[8%] before:-inset-y-[18%] before:-z-10 before:rounded-[50%] before:bg-[radial-gradient(ellipse_at_50%_60%,var(--title-shade),transparent_72%)] before:content-[''] md:flex-row md:items-end md:justify-between">
         <h1 className="display text-[clamp(3.75rem,13vw,12rem)] leading-[0.92] text-fg">
