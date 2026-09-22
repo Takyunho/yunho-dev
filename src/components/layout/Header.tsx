@@ -1,4 +1,5 @@
 import Link from "next/link";
+import BrandLogo from "@/components/layout/BrandLogo";
 import ExternalLink from "@/components/layout/ExternalLink";
 import ThemeToggle from "@/components/layout/ThemeToggle";
 import { PROFILE } from "@/content/profile";
@@ -14,11 +15,9 @@ const NAVIGATION_ITEMS = [
 
 export default function Header() {
   return (
-    // 로고는 맨바탕에 두고, 오른쪽 메뉴 묶음만 떠 있는 유리 위에 올린다. 3D 오브젝트와 겹쳐도 메뉴 글자가 읽히게 하려는 것이다
+    // 로고와 오른쪽 메뉴 묶음을 각각 떠 있는 유리 위에 올린다. 3D 오브젝트나 본문과 겹쳐도 글자가 읽히게 하려는 것이다
     <header className="fixed inset-x-5 top-3 z-30 flex items-center justify-between md:inset-x-10 md:top-4">
-      <Link href="/#hero" className="display text-2xl leading-none text-fg">
-        yunho<span className="text-accent">.dev</span>
-      </Link>
+      <BrandLogo />
 
       <div className="liquid-glass relative flex items-center gap-5 rounded-full py-1 pr-2 pl-6 md:gap-7 md:pr-3 md:pl-7">
         <nav

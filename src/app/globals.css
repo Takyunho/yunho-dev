@@ -127,6 +127,75 @@ body {
   }
 }
 
+/* 헤더 로고. 펼친 정도(0 또는 1)를 변수 하나로 두고, 마크와 글자가 그 값으로 자기 모양을 정한다 */
+.brand-logo {
+  --brand-logo-open: 0;
+}
+
+.brand-logo:focus-visible {
+  --brand-logo-open: 1;
+}
+
+/* 터치 기기는 누른 뒤에도 :hover가 남아 펼친 채 굳는다. 올려서 펼치는 것은 마우스가 있는 기기에서만 한다 */
+@media (hover: hover) {
+  .brand-logo:hover {
+    --brand-logo-open: 1;
+  }
+}
+
+.brand-logo-mark {
+  opacity: calc(1 - var(--brand-logo-open));
+  transform: scale(calc(1 - var(--brand-logo-open) * 0.4));
+  filter: blur(calc(var(--brand-logo-open) * 3px));
+}
+
+.brand-logo-letter {
+  display: inline-block;
+  opacity: var(--brand-logo-open);
+  transform: translateY(calc((1 - var(--brand-logo-open)) * 0.35em));
+  filter: blur(calc((1 - var(--brand-logo-open)) * 4px));
+}
+
+/* width는 auto로 전환되지 않아서 한 칸짜리 grid의 트랙을 0fr에서 1fr로 늘린다.
+   fr은 calc에 넣을 수 없어 이 값만 펼친 상태를 따로 적는다 */
+.brand-logo-reveal {
+  display: grid;
+  grid-template-columns: 0fr;
+}
+
+.brand-logo:focus-visible .brand-logo-reveal {
+  grid-template-columns: 1fr;
+}
+
+@media (hover: hover) {
+  .brand-logo:hover .brand-logo-reveal {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .brand-logo-reveal {
+    transition: grid-template-columns 420ms var(--ease-out);
+  }
+
+  .brand-logo-mark {
+    transition:
+      opacity 180ms var(--ease-out),
+      transform 320ms var(--ease-out),
+      filter 180ms var(--ease-out);
+  }
+
+  /* 전환 시간과 지연은 바뀐 뒤의 값을 쓴다. 그래서 펼칠 때는 글자가 앞에서부터 차례로 떠오르고, 접을 때는 한꺼번에 빨리 사라진다 */
+  .brand-logo-letter {
+    transition-property: opacity, transform, filter;
+    transition-timing-function: var(--ease-out);
+    transition-duration: calc(160ms + var(--brand-logo-open) * 260ms);
+    transition-delay: calc(
+      var(--brand-logo-open) * (80ms + var(--letter-index) * 28ms)
+    );
+  }
+}
+
 /* 프로젝트 색은 바탕에 따라 밝기가 다르다. 쓰는 쪽에서 두 값을 넘기면 여기서 테마에 맞는 것을 고른다.
    :root에서 고르면 안 된다. 그 자리에는 아직 프로젝트별 값이 없어 빈 값으로 굳는다 */
 [data-project-accent] {
