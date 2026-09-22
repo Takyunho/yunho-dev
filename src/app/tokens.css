@@ -29,8 +29,8 @@
   /* 마스크는 불투명 여부만 본다 */
   --mask-solid: oklch(0% 0 0);
 
-  --text-label: 0.8125rem;
-  --text-body: 1.0625rem;
+  --text-label: 0.875rem;
+  --text-body: 1.125rem;
   --measure: 62ch;
 
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
