@@ -23,7 +23,7 @@ const instrumentSerif = Instrument_Serif({
 
 const SITE_TITLE = "탁윤호 | Frontend Engineer";
 const SITE_DESCRIPTION =
-  "사용자가 머무르고 싶은 화면을 만드는 프론트엔드 개발자 탁윤호의 포트폴리오입니다.";
+  "산업 현장의 데이터를 읽기 쉬운 화면으로 옮기는 프론트엔드 개발자 탁윤호의 포트폴리오입니다.";
 
 export const metadata: Metadata = {
   // 이 값이 없으면 og:image 같은 상대 경로가 절대 주소로 풀리지 않아서 링크 미리보기에 이미지가 나오지 않는다

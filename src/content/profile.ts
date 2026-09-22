@@ -28,7 +28,7 @@ export const PROFILE: Profile = {
   careerSince: "2022",
   tagline: "산업 현장의 데이터를 읽기 쉬운 화면으로 만듭니다.",
   introduction:
-    "AI 기반 산업 안전 모니터링 플랫폼의 프론트엔드를 첫 버전부터 만들어 온 5년차 개발자입니다.",
+    "산업 안전 모니터링 플랫폼의 첫 버전부터 성장을 이끌어온 5년 차 프론트엔드 개발자입니다.",
   principles: [
     {
       title: "제품의 기반을 만듭니다",
