@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import ThemeProvider from "@/components/layout/ThemeProvider";
+import SceneLoader from "@/components/scene/SceneLoader";
 import { PROFILE } from "@/content/profile";
 import "./globals.css";
 
@@ -64,7 +65,11 @@ export default function RootLayout({
         <noscript>
           <style>{`.line-mask > span { transform: none; }`}</style>
         </noscript>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          {children}
+          {/* 페이지보다 뒤에 둬야 같은 z-0인 홈의 안개 층(Atmosphere) 위에 그려진다 */}
+          <SceneLoader />
+        </ThemeProvider>
       </body>
     </html>
   );

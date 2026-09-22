@@ -67,7 +67,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   const { previous, next } = findNeighbours(id);
 
   return (
-    // 읽는 화면이라 3D 장면과 부드러운 스크롤은 두지 않는다
+    // 읽는 화면이라 부드러운 스크롤은 두지 않는다. 레이아웃의 3D 장면도 이 화면에서는 숨기고 멈춘다
     <div className="relative">
       <Header />
 

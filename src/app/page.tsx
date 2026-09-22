@@ -2,7 +2,6 @@ import Atmosphere from "@/components/layout/Atmosphere";
 import Header from "@/components/layout/Header";
 import SceneStateSync from "@/components/layout/SceneStateSync";
 import SmoothScroll from "@/components/layout/SmoothScroll";
-import SceneLoader from "@/components/scene/SceneLoader";
 import AboutSection from "@/components/sections/AboutSection";
 import ContactSection from "@/components/sections/ContactSection";
 import HeroSection from "@/components/sections/HeroSection";
@@ -16,7 +15,6 @@ export default function Home() {
       <SmoothScroll />
       <SceneStateSync />
       <Atmosphere />
-      <SceneLoader />
       <Header />
 
       <main className="relative z-10">
@@ -27,7 +25,6 @@ export default function Home() {
         <LabSection />
         <ContactSection />
       </main>
-
     </div>
   );
 }
