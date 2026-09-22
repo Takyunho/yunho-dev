@@ -142,6 +142,27 @@ button:not(:disabled) {
   cursor: pointer;
 }
 
+/* 끌어 넘길 수 있는 자리에서만 손을 편다. 글자 위에서는 규칙이 붙지 않아 I빔이 남고, 그게 곧 "여기는 긁는 자리"라는 안내가 된다.
+   자손까지 함께 바꾸는 것은 커서가 상속되기 때문이다. 글자 요소가 저마다 auto로 되돌려 버리면 손 모양이 나오지 않는다 */
+[data-drag-ready="true"],
+[data-drag-ready="true"] * {
+  cursor: grab;
+}
+
+/* 누르면 어디론가 가는 자리는 끄는 자리가 아니다. 위 규칙이 자손을 전부 덮으므로 여기서 되돌린다.
+   링크 안의 아이콘까지 짚는 이유는 포인터가 실제로 얹히는 것이 링크가 아니라 그 안의 svg이기 때문이다 */
+[data-drag-ready="true"] :is(a[href], button:not(:disabled)),
+[data-drag-ready="true"] :is(a[href], button:not(:disabled)) * {
+  cursor: pointer;
+}
+
+/* 끄는 동안에는 포인터가 목록 밖으로 나가도 쥔 손을 유지한다.
+   버튼의 cursor: pointer처럼 자기 커서를 가진 요소를 덮어야 해서 important를 쓴다 */
+body[data-dragging-carousel],
+body[data-dragging-carousel] * {
+  cursor: grabbing !important;
+}
+
 /* 목록의 제목이 상세 페이지의 제목 자리로 옮겨 가며 커진다 */
 ::view-transition-group(*) {
   animation-duration: 260ms;
