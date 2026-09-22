@@ -1,8 +1,10 @@
 "use client";
 
+import { unstable_ViewTransition as ViewTransition } from "react";
 import Link from "next/link";
 import ExternalLink from "@/components/layout/ExternalLink";
 import { sceneState } from "@/components/scene/sceneState";
+import { titleTransitionName } from "@/lib/viewTransition";
 import type { Project, ProjectCategory } from "@/content/projects";
 
 interface ProjectCardProps {
@@ -56,15 +58,18 @@ export default function ProjectCard({
       </div>
 
       <div>
-        <h3 className={titleClassName}>
-          {detailHref ? (
-            <Link href={detailHref} className="hover:underline">
-              {project.title}
-            </Link>
-          ) : (
-            project.title
-          )}
-        </h3>
+        {/* 상세 페이지의 큰 제목과 같은 이름을 붙여, 넘어갈 때 이 글자가 그 자리로 옮겨 가며 커지게 한다 */}
+        <ViewTransition name={titleTransitionName(project.id)}>
+          <h3 className={titleClassName}>
+            {detailHref ? (
+              <Link href={detailHref} className="hover:underline">
+                {project.title}
+              </Link>
+            ) : (
+              project.title
+            )}
+          </h3>
+        </ViewTransition>
         <p className="label mt-1">{project.role}</p>
 
         <p className="mt-3 max-w-(--measure) text-(length:--text-body) leading-relaxed text-muted">

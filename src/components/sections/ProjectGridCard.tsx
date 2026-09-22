@@ -1,7 +1,9 @@
 "use client";
 
+import { unstable_ViewTransition as ViewTransition } from "react";
 import Link from "next/link";
 import { sceneState } from "@/components/scene/sceneState";
+import { titleTransitionName } from "@/lib/viewTransition";
 import type { Project, ProjectCategory } from "@/content/projects";
 
 interface ProjectGridCardProps {
@@ -50,15 +52,18 @@ export default function ProjectGridCard({
         </p>
       </div>
 
-      <h3 className="mt-3 text-lg leading-snug font-semibold tracking-tight text-fg transition-colors duration-(--dur-short) group-hover:text-(--project-accent)">
-        {detailHref ? (
-          <Link href={detailHref} className="hover:underline">
-            {project.title}
-          </Link>
-        ) : (
-          project.title
-        )}
-      </h3>
+      {/* 리스트 보기와 같은 이름이다. 두 보기가 동시에 그려지지 않으므로 이름이 겹치지 않는다 */}
+      <ViewTransition name={titleTransitionName(project.id)}>
+        <h3 className="mt-3 text-lg leading-snug font-semibold tracking-tight text-fg transition-colors duration-(--dur-short) group-hover:text-(--project-accent)">
+          {detailHref ? (
+            <Link href={detailHref} className="hover:underline">
+              {project.title}
+            </Link>
+          ) : (
+            project.title
+          )}
+        </h3>
+      </ViewTransition>
       <p className="label mt-1">{project.role}</p>
 
       {/* 칸 안의 다른 글자가 모두 라벨 크기라 설명만 한 단계 키워 먼저 읽히게 한다.

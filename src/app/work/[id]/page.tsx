@@ -1,3 +1,4 @@
+import { unstable_ViewTransition as ViewTransition } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -5,6 +6,7 @@ import ExternalLink from "@/components/layout/ExternalLink";
 import Header from "@/components/layout/Header";
 import { PROJECT_DETAILS } from "@/content/projectDetails";
 import { PROJECTS, PROJECT_CATEGORIES } from "@/content/projects";
+import { titleTransitionName } from "@/lib/viewTransition";
 
 interface ProjectPageProps {
   params: Promise<{ id: string }>;
@@ -102,9 +104,11 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
           {/* 제목이 한글이라 세리프 글리프가 없어 본문 글꼴로 떨어진다. 세리프에 맞춘 큰 크기를
               그대로 두면 획이 가늘어 흐릿하게 읽히므로, 크기를 낮추고 굵기로 위계를 만든다 */}
-          <h1 className="mt-5 text-[clamp(1.875rem,4.5vw,2.75rem)] leading-[1.2] font-semibold tracking-tight break-words text-fg">
-            {project.title}
-          </h1>
+          <ViewTransition name={titleTransitionName(project.id)}>
+            <h1 className="mt-5 text-[clamp(1.875rem,4.5vw,2.75rem)] leading-[1.2] font-semibold tracking-tight break-words text-fg">
+              {project.title}
+            </h1>
+          </ViewTransition>
           <p className="label mt-2">{project.role}</p>
 
           {/* 여는 문단은 본문보다 한 단계 크고 진하게 둔다. 제목 다음으로 먼저 읽히는 자리다 */}
