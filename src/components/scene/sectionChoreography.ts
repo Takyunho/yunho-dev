@@ -203,7 +203,7 @@ const CONTACT_ANCHOR_RATIO: Record<SceneProfile, number> = {
   stacked: 0.6,
   mobile: 0.6,
 };
-// 데스크톱 Contact 덩어리의 x (화면 반너비 비율). 옆 배치는 제목 "Let's talk"의 오른쪽 끝을 넘겨야 하고,
+// 데스크톱 Contact 덩어리의 x (화면 반너비 비율). 옆 배치는 제목의 오른쪽 끝을 넘겨야 하고,
 // 문구 사이 배치는 화면이 좁아서 오른쪽 부품이 화면 밖으로 나가지 않는 자리다
 const CONTACT_X_RATIO: Record<SceneProfile, number> = {
   side: 0.6,
