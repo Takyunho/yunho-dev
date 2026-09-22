@@ -11,11 +11,11 @@ export default function LabSection() {
 
   return (
     <section
-      id="lab"
+      id="side-projects"
       ref={sectionRef}
       className="mx-auto flex min-h-svh max-w-6xl flex-col justify-center px-5 py-24 md:px-10 md:py-32"
     >
-      <SectionHeading title="Lab" caption="실험과 학습" />
+      <SectionHeading title="Side Projects" caption="개인 프로젝트" />
 
       <ul data-scene-text className="border-b border-line">
         {LAB_ITEMS.map((labItem) => (

@@ -14,7 +14,7 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
 const TEXT_GAP_PAIRS: [SectionId, SectionId][] = [
   ["about", "stack"],
   ["stack", "work"],
-  ["work", "lab"],
+  ["work", "side-projects"],
 ];
 const POINTER_ENERGY_PER_DISTANCE = 6;
 const POINTER_ENERGY_MAX = 1.5;

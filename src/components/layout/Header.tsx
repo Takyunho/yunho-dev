@@ -8,7 +8,7 @@ const NAVIGATION_ITEMS = [
   { label: "About", href: "/#about" },
   { label: "Stack", href: "/#stack" },
   { label: "Work", href: "/#work" },
-  { label: "Lab", href: "/#lab" },
+  { label: "Side Projects", href: "/#side-projects" },
   { label: "Contact", href: "/#contact" },
 ];
 
