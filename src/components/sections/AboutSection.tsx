@@ -61,12 +61,13 @@ export default function AboutSection() {
                   {phase.title}
                 </h4>
                 {/* 이름 붙은 묶음은 점 두 겹이 겹쳐 보이므로, 이름은 점 없이 두고 항목에만 점을 찍는다.
-                    이름이 항목과 같은 크기라 색으로 구분하고, 묶음 사이를 항목 사이보다 넓게 띄워 어디서 나뉘는지 보이게 한다 */}
+                    이름은 굵기로만 항목과 구분하고, 묶음 사이를 항목 사이보다 넓게 띄워 어디서 나뉘는지 보이게 한다.
+                    강조색은 세로선의 점에만 쓴다. 소분류에 색을 얹으면 크기로 가장 강한 시기 제목보다 먼저 눈에 띈다 */}
                 <div className="mt-3 space-y-5">
                   {phase.groups.map((group) => (
                     <div key={group.label ?? group.items[0]}>
                       {group.label && (
-                        <p className="text-(length:--text-body) font-semibold text-accent">
+                        <p className="text-(length:--text-body) font-semibold text-fg">
                           {group.label}
                         </p>
                       )}
