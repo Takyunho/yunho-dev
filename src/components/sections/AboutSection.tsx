@@ -48,12 +48,13 @@ export default function AboutSection() {
           </p>
 
           {/* 세로선이 시기를 하나로 꿰고, 선 위의 점이 시기가 시작하는 자리를 짚는다. 최근이 위에 온다.
-              점은 기간 글자의 가운데 높이에 맞추고, 가로로는 pl-5와 선 두께의 절반만큼 당겨 선 한가운데에 둔다 */}
-          <ol className="mt-8 space-y-10 border-l border-line pl-5">
+              점은 기간 글자의 가운데 높이(9.5px)에 맞추고, 가로로는 pl-5에서 선 두께의 절반을 뺀 만큼 당겨 선 한가운데에 둔다.
+              선은 테두리 대신 따로 그려 첫 점의 가운데에서 시작한다. 테두리로 두면 첫 점 위로 선이 삐져나온다 */}
+          <ol className="relative mt-8 space-y-10 pl-5 before:absolute before:top-[9.5px] before:bottom-0 before:left-0 before:w-px before:bg-line">
             {CAREER.phases.map((phase) => (
               <li
                 key={phase.title}
-                className="relative before:absolute before:top-[5px] before:-left-[25px] before:size-[9px] before:rounded-full before:bg-accent"
+                className="relative before:absolute before:top-[5px] before:-left-[24px] before:size-[9px] before:rounded-full before:bg-accent"
               >
                 <p className="label font-mono tabular-nums">{phase.period}</p>
                 <h4 className="mt-1 text-[1.375rem] leading-snug font-semibold text-fg">
