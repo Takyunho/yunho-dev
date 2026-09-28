@@ -140,6 +140,13 @@ export default function SceneStateSync() {
           aboutSection.getBoundingClientRect().top + window.scrollY,
         );
       }
+      const aboutText = measureTextBounds("about");
+      if (aboutText) {
+        sceneState.aboutExitProgress = computeSectionProgress(
+          sectionCenters,
+          aboutText.bottom + window.scrollY,
+        );
+      }
       measureLayout();
       updateSectionProgress();
     };

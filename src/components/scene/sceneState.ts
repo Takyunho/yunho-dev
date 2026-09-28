@@ -34,6 +34,8 @@ export const sceneState = {
   // About 섹션의 위쪽이 화면 위쪽에 맞춰졌을 때(헤더의 About을 눌러 도착하는 위치)의 sectionProgress.
   // 섹션이 화면보다 길수록 1보다 작아진다
   aboutArrivalProgress: 1,
+  // About 문구의 아래쪽 끝이 화면 위쪽에 닿았을 때(문구가 화면을 다 벗어난 위치)의 sectionProgress
+  aboutExitProgress: 1.6,
   // NDC 좌표 (-1~1, 위쪽이 +y)
   pointer: { x: 0, y: 0 },
   pointerActive: false,
