@@ -19,7 +19,7 @@
 | 분류                | 사용 기술                                            |
 | :------------------ | :--------------------------------------------------- |
 | 프레임워크          | Next.js (App Router, View Transitions), React, TypeScript |
-| 3D                  | three.js, React Three Fiber, drei                    |
+| 3D                  | three.js, React Three Fiber                          |
 | 애니메이션과 스크롤 | GSAP (ScrollTrigger), Lenis, Embla Carousel          |
 | 스타일과 테마       | Tailwind CSS 4, next-themes, Instrument Serif(제목)와 Geist, Pretendard(본문) |
 | 배포                | Vercel                                               |
@@ -105,11 +105,11 @@ pnpm build
 
 연출을 조정할 때 보는 파일은 다음과 같습니다.
 
-- `sectionChoreography.ts`에는 섹션 진행도에 따라 모이기, 굳기, 흩어지기, 다시 뭉치기, 풀리기, 고이기가 일어나는 구간이 부품이 머무는 자리(본문 옆 여백, 문구 사이, 휴대폰)별로 나뉘어 있습니다. 휴대폰에서는 문구가 화면 폭을 다 쓰므로 부품이 흩어지는 동안 화면 밖 길로 돌아갑니다. 여백에 있던 부품은 Side Projects 목록과 Contact 제목 사이의 빈 줄을 따라 오른쪽으로 건너간 뒤 섹션과 함께 올라오다가 천천히 풀립니다.
+- `sectionChoreography.ts`에는 섹션 진행도에 따라 모이기, 굳기, 흩어지기, 다시 뭉치기, 풀리기, 고이기가 일어나는 구간이 부품이 머무는 자리(본문 옆 여백, 문구 사이, 휴대폰)별로 나뉘어 있습니다. 부품이 흩어지는 동안 문구를 가로지르지 않도록, 휴대폰에서는 모든 부품이, 데스크톱에서는 화면 왼쪽에 붙은 About 문구 쪽으로 가는 부품이 화면 밖 길로 돌아갑니다. 본문 옆 여백에 놓이는 넓은 화면에서는 왼쪽 부품이 About 문구가 화면 위로 다 올라간 뒤에 내려앉습니다. 여백에 있던 부품은 Side Projects 목록과 Contact 제목 사이의 빈 줄을 따라 오른쪽으로 건너간 뒤 섹션과 함께 올라오다가 천천히 풀립니다.
 - `sceneLayout.ts`에는 부품이 흩어질 때의 자리 규칙이 있습니다. 본문 옆 여백이 넓으면 여백 한가운데에 두고, 좁으면(태블릿, 휴대폰, 세로로 긴 창) 섹션 문구 사이 빈 공간에 둘씩 두어 문구를 가리지 않게 합니다. 어느 쪽인지는 미디어 쿼리가 아니라 실제로 잰 여백으로 정합니다.
 - `partDefinitions.ts`에는 부품의 형태와 덩어리 안의 자리, 흩어질 때 향하는 자리가 있습니다. 입자는 부품 그룹 바로 아래 메시에만 내려앉고 메시마다 최소 12개씩 배정되므로, 같은 재질의 작은 조각은 한 메시로 합칩니다. 신호와 고리처럼 스스로 움직이는 메시는 `MOTION_KEY`로 표시해 입자 목표에서 뺍니다.
 - `waveSurface.ts`에는 마지막 구간의 파도를 만드는 1차원 수면 시뮬레이션이 있습니다. 웅덩이에 떨어지는 점(`PoolDrops.tsx`)도 이 높이를 읽어 물에 닿는 때를 정합니다.
-- `themePalette.ts`에는 테마별 부품 재질색, 입자색, 조명 강도가 있습니다. 라이트 모드는 입자를 잉크처럼 일반 혼합으로 그립니다. 여기의 `accent` 값은 `src/app/tokens.css`의 `--accent`(OKLCH)를 hex로 바꾼 값이라, 한쪽을 바꾸면 다른 쪽도 맞춰야 합니다.
+- `themePalette.ts`에는 테마별 부품 재질색, 입자색, 조명 강도가 있습니다. 조명 강도는 three r155 이전의 조명 단위로 적은 값이라 `SceneLighting.tsx`가 π를 곱해 씁니다. 반사 환경은 외부 HDR 파일 없이 코드로 만든 밝은 방(`RoomEnvironment`)입니다. 라이트 모드는 입자를 잉크처럼 일반 혼합으로 그립니다. 여기의 `accent` 값은 `src/app/tokens.css`의 `--accent`(OKLCH)를 hex로 바꾼 값이라, 한쪽을 바꾸면 다른 쪽도 맞춰야 합니다.
 
 섹션을 추가하거나 순서를 바꿀 때는 `sceneState.ts`의 `SECTION_IDS`와 섹션 요소의 `id`를 함께 맞추고, `sectionChoreography.ts`의 구간과 `SceneStateSync.tsx`의 문구 사이 빈 공간 목록을 다시 정합니다.
 
