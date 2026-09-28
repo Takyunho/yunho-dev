@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
 import {
@@ -89,6 +89,14 @@ export default function UiParts({
       ),
     [parts],
   );
+  // three의 기본 그림자 재질은 alphaHash와 opacity를 넘겨받지 않아서, 굳는 도중에도 그림자가 꽉 찬 실루엣으로 찍힌다
+  const [shadowDepthMaterial] = useState(
+    () => new THREE.MeshDepthMaterial({ alphaHash: true, opacity: 0 }),
+  );
+
+  useEffect(() => {
+    return () => shadowDepthMaterial.dispose();
+  }, [shadowDepthMaterial]);
 
   // 부품 메시는 코드로 만들어져 JSX prop으로 그림자를 켤 수 없어서 여기서 직접 켠다
   useEffect(() => {
@@ -97,10 +105,11 @@ export default function UiParts({
         if (child instanceof THREE.Mesh) {
           child.castShadow = castShadows;
           child.receiveShadow = castShadows;
+          child.customDepthMaterial = shadowDepthMaterial;
         }
       });
     });
-  }, [parts, castShadows]);
+  }, [parts, castShadows, shadowDepthMaterial]);
 
   // 한쪽 테마에서만 보이는 메시를 테마에 맞춰 바꿔 보인다
   useEffect(() => {
@@ -302,6 +311,7 @@ export default function UiParts({
       material.opacity = currentPhases.solid;
       material.emissiveIntensity = glowPulse;
     });
+    shadowDepthMaterial.opacity = currentPhases.solid;
 
     // 3D 쪽이 DOM에 쓰는 유일한 값. 같은 값이면 쓰지 않는다
     const atmosphereOpacity = (1 - currentPhases.solid * 0.7).toFixed(3);
