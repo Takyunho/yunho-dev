@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import ThemeProvider from "@/components/layout/ThemeProvider";
+import SceneLoader from "@/components/scene/SceneLoader";
 import { PROFILE } from "@/content/profile";
 import "./globals.css";
 
@@ -23,7 +24,7 @@ const instrumentSerif = Instrument_Serif({
 
 const SITE_TITLE = "탁윤호 | Frontend Engineer";
 const SITE_DESCRIPTION =
-  "사용자가 머무르고 싶은 화면을 만드는 프론트엔드 개발자 탁윤호의 포트폴리오입니다.";
+  "산업 현장의 데이터를 읽기 쉬운 화면으로 옮기는 프론트엔드 개발자 탁윤호의 포트폴리오입니다.";
 
 export const metadata: Metadata = {
   // 이 값이 없으면 og:image 같은 상대 경로가 절대 주소로 풀리지 않아서 링크 미리보기에 이미지가 나오지 않는다
@@ -64,7 +65,11 @@ export default function RootLayout({
         <noscript>
           <style>{`.line-mask > span { transform: none; }`}</style>
         </noscript>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          {children}
+          {/* 페이지보다 뒤에 둬야 같은 z-0인 홈의 안개 층(Atmosphere) 위에 그려진다 */}
+          <SceneLoader />
+        </ThemeProvider>
       </body>
     </html>
   );

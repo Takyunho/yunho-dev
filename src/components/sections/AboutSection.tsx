@@ -3,12 +3,12 @@
 import { useRef } from "react";
 import SectionHeading from "@/components/sections/SectionHeading";
 import { useRevealOnScroll } from "@/hooks/useRevealOnScroll";
+import { CAREER } from "@/content/career";
 import { PROFILE } from "@/content/profile";
 
+// 회사와 시작 연도는 아래 경력에 적혀 있어 여기서 빼고, 거기서 알 수 없는 것만 남긴다
 const PROFILE_FACTS = [
   { label: "Role", value: PROFILE.role },
-  { label: "Company", value: PROFILE.company },
-  { label: "Since", value: PROFILE.careerSince },
   { label: "Based in", value: PROFILE.location },
 ];
 
@@ -33,22 +33,54 @@ export default function AboutSection() {
           {PROFILE.introduction}
         </p>
 
-        <ul className="mt-12 space-y-8">
-          {PROFILE.principles.map((principle) => (
-            <li
-              key={principle.title}
-              data-reveal
-              className="border-t border-line pt-5"
-            >
-              <h3 className="text-lg font-semibold text-fg">
-                {principle.title}
-              </h3>
-              <p className="mt-2 max-w-(--measure) text-(length:--text-body) leading-relaxed text-muted">
-                {principle.description}
-              </p>
-            </li>
-          ))}
-        </ul>
+        {/* 어디서 얼마나 일했는지, 그동안 맡은 일이 어떻게 달라졌는지.
+            Work의 프로젝트 목록은 분류로 묶여 있어 이 순서가 드러나지 않는다.
+            3D 부품이 이 글자 옆을 지나가므로 섹션이 길어지면 겹친다. 내용을 더할 때는 높이를 확인할 것 */}
+        <div data-reveal className="mt-12 border-t border-line pt-6">
+          <h3 className="text-2xl font-semibold text-fg">{CAREER.company}</h3>
+          <p className="label mt-1 font-mono tabular-nums">
+            {CAREER.period} · {CAREER.role}
+          </p>
+          <p className="mt-3 max-w-(--measure) text-(length:--text-body) leading-relaxed text-muted">
+            {CAREER.companyDescription}
+          </p>
+
+          {/* 세로선이 시기를 하나로 꿰어 준다. 최근이 위에 온다 */}
+          <ol className="mt-7 space-y-7 border-l border-line pl-5">
+            {CAREER.phases.map((phase) => (
+              <li key={phase.title}>
+                <p className="label font-mono tabular-nums">{phase.period}</p>
+                <h4 className="mt-1 text-xl font-semibold text-fg">
+                  {phase.title}
+                </h4>
+                {/* 이름 붙은 묶음은 점 두 겹이 겹쳐 보이므로, 이름은 점 없이 굵게만 두고 항목에만 점을 찍는다 */}
+                <div className="mt-2 space-y-3">
+                  {phase.groups.map((group) => (
+                    <div key={group.label ?? group.items[0]}>
+                      {group.label && (
+                        <p className="text-(length:--text-body) font-semibold text-fg">
+                          {group.label}
+                        </p>
+                      )}
+                      <ul
+                        className={`list-disc space-y-2 pl-4 ${group.label ? "mt-1.5" : ""}`}
+                      >
+                        {group.items.map((item) => (
+                          <li
+                            key={item}
+                            className="max-w-(--measure) text-(length:--text-body) leading-relaxed text-muted"
+                          >
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
 
         <dl
           data-reveal
@@ -56,9 +88,7 @@ export default function AboutSection() {
         >
           {PROFILE_FACTS.map((profileFact) => (
             <div key={profileFact.label}>
-              <dt className="label">
-                {profileFact.label}
-              </dt>
+              <dt className="label">{profileFact.label}</dt>
               <dd className="mt-2 text-base font-medium text-fg">
                 {profileFact.value}
               </dd>

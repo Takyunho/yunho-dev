@@ -6,6 +6,7 @@ import ProjectCard from "@/components/sections/ProjectCard";
 import ProjectGridCard from "@/components/sections/ProjectGridCard";
 import SectionHeading from "@/components/sections/SectionHeading";
 import { ScrollTrigger } from "@/lib/gsap";
+import { isPointerOverText } from "@/lib/pointerOverText";
 import { PROJECT_DETAILS } from "@/content/projectDetails";
 import { useRevealOnScroll } from "@/hooks/useRevealOnScroll";
 import {
@@ -32,6 +33,18 @@ function detailHrefOf(project: Project): string | undefined {
   return PROJECT_DETAILS[project.id] ? `/work/${project.id}` : undefined;
 }
 
+// 옵션 객체는 안에 함수를 담고 있어 렌더마다 새로 만들면 캐러셀이 계속 다시 초기화된다. 그래서 바깥에 둔다
+type CarouselOptions = NonNullable<Parameters<typeof useEmblaCarousel>[0]>;
+
+const CAROUSEL_OPTIONS: CarouselOptions = {
+  align: "start",
+  containScroll: "trimSnaps",
+  // 글자 위에서 시작한 드래그는 넘기지 않고 선택에 넘긴다. 그러지 않으면 문장을 긁을 때 목록이 같이 넘어간다.
+  // 빈 자리에서 시작했다면 넘길 뜻이므로 그대로 끌린다. 손가락은 길게 눌러야 선택이 되니 언제나 끌 수 있다
+  watchDrag: (_, event) =>
+    "touches" in event || !isPointerOverText(event.clientX, event.clientY),
+};
+
 export default function WorkSection() {
   const sectionRef = useRef<HTMLElement>(null);
   useRevealOnScroll(sectionRef);
@@ -41,11 +54,7 @@ export default function WorkSection() {
   const [pageCount, setPageCount] = useState(0);
   const [reservedListHeight, setReservedListHeight] = useState(0);
 
-  // 세로 스크롤을 막지 않으면서 좌우로만 끌리게 한다
-  const [emblaRef, emblaApi] = useEmblaCarousel({
-    align: "start",
-    containScroll: "trimSnaps",
-  });
+  const [emblaRef, emblaApi] = useEmblaCarousel(CAROUSEL_OPTIONS);
 
   const categoryById = useMemo(
     () =>
@@ -93,6 +102,61 @@ export default function WorkSection() {
     emblaApi.on("select", syncPosition).on("reInit", syncPosition);
     return () => {
       emblaApi.off("select", syncPosition).off("reInit", syncPosition);
+    };
+  }, [emblaApi]);
+
+  // 끌기로 판정된 뒤에만 선택을 잠그고 커서를 쥔 손으로 바꾼다. 글자 위에서 시작한 누름은
+  // pointerDown까지 오지 않아 선택이 그대로 산다. 잠그지 않으면 끌면서 지나간 글자가 딸려 선택돼,
+  // 면을 넘기고 나면 엉뚱한 글자가 파랗게 남는다
+  useEffect(() => {
+    if (!emblaApi) return;
+    const viewport = emblaApi.rootNode();
+    const beginDrag = () => {
+      viewport.style.userSelect = "none";
+      document.body.dataset.draggingCarousel = "true";
+    };
+    const endDrag = () => {
+      viewport.style.userSelect = "";
+      delete document.body.dataset.draggingCarousel;
+    };
+    emblaApi.on("pointerDown", beginDrag).on("pointerUp", endDrag);
+    return () => {
+      emblaApi.off("pointerDown", beginDrag).off("pointerUp", endDrag);
+      endDrag();
+    };
+  }, [emblaApi]);
+
+  // 누른 자리가 끌리는 자리인지 미리 알려 준다. 판정이 watchDrag와 어긋나면 커서가 거짓말을 하므로 같은 함수를 쓴다.
+  // 글자 한 칸을 재는 일이라 움직임마다 하지 않고 프레임마다 한 번만 한다
+  useEffect(() => {
+    if (!emblaApi) return;
+    const viewport = emblaApi.rootNode();
+    let pointerX = 0;
+    let pointerY = 0;
+    let scheduledFrame = 0;
+
+    const updateCursor = (event: MouseEvent) => {
+      pointerX = event.clientX;
+      pointerY = event.clientY;
+      if (scheduledFrame) return;
+      scheduledFrame = window.requestAnimationFrame(() => {
+        scheduledFrame = 0;
+        viewport.dataset.dragReady = String(
+          !isPointerOverText(pointerX, pointerY),
+        );
+      });
+    };
+    const forgetCursor = () => {
+      delete viewport.dataset.dragReady;
+    };
+
+    viewport.addEventListener("mousemove", updateCursor);
+    viewport.addEventListener("mouseleave", forgetCursor);
+    return () => {
+      window.cancelAnimationFrame(scheduledFrame);
+      viewport.removeEventListener("mousemove", updateCursor);
+      viewport.removeEventListener("mouseleave", forgetCursor);
+      forgetCursor();
     };
   }, [emblaApi]);
 

@@ -8,7 +8,10 @@ export const BRAND_COLORS = {
   accent: "#5b6cff",
 } as const;
 
-const MARK_VIEW_BOX_SIZE = 32;
+// 헤더 로고도 같은 마크를 그린다
+export const BRAND_MARK_VIEW_BOX_SIZE = 32;
+export const BRAND_MARK_PATH = "M8.5 7 L16 17 L23.5 7 M16 17 L16 25";
+export const BRAND_MARK_STROKE_WIDTH = 3.6;
 
 interface BrandMarkOptions {
   size: number;
@@ -34,13 +37,13 @@ export function renderBrandMark({
       <svg
         width={size}
         height={size}
-        viewBox={`0 0 ${MARK_VIEW_BOX_SIZE} ${MARK_VIEW_BOX_SIZE}`}
+        viewBox={`0 0 ${BRAND_MARK_VIEW_BOX_SIZE} ${BRAND_MARK_VIEW_BOX_SIZE}`}
         fill="none"
       >
         <path
-          d="M8.5 7 L16 17 L23.5 7 M16 17 L16 25"
+          d={BRAND_MARK_PATH}
           stroke={BRAND_COLORS.foreground}
-          strokeWidth="3.6"
+          strokeWidth={BRAND_MARK_STROKE_WIDTH}
           strokeLinecap="round"
           strokeLinejoin="round"
         />

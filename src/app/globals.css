@@ -127,6 +127,75 @@ body {
   }
 }
 
+/* 헤더 로고. 펼친 정도(0 또는 1)를 변수 하나로 두고, 마크와 글자가 그 값으로 자기 모양을 정한다 */
+.brand-logo {
+  --brand-logo-open: 0;
+}
+
+.brand-logo:focus-visible {
+  --brand-logo-open: 1;
+}
+
+/* 터치 기기는 누른 뒤에도 :hover가 남아 펼친 채 굳는다. 올려서 펼치는 것은 마우스가 있는 기기에서만 한다 */
+@media (hover: hover) {
+  .brand-logo:hover {
+    --brand-logo-open: 1;
+  }
+}
+
+.brand-logo-mark {
+  opacity: calc(1 - var(--brand-logo-open));
+  transform: scale(calc(1 - var(--brand-logo-open) * 0.4));
+  filter: blur(calc(var(--brand-logo-open) * 3px));
+}
+
+.brand-logo-letter {
+  display: inline-block;
+  opacity: var(--brand-logo-open);
+  transform: translateY(calc((1 - var(--brand-logo-open)) * 0.35em));
+  filter: blur(calc((1 - var(--brand-logo-open)) * 4px));
+}
+
+/* width는 auto로 전환되지 않아서 한 칸짜리 grid의 트랙을 0fr에서 1fr로 늘린다.
+   fr은 calc에 넣을 수 없어 이 값만 펼친 상태를 따로 적는다 */
+.brand-logo-reveal {
+  display: grid;
+  grid-template-columns: 0fr;
+}
+
+.brand-logo:focus-visible .brand-logo-reveal {
+  grid-template-columns: 1fr;
+}
+
+@media (hover: hover) {
+  .brand-logo:hover .brand-logo-reveal {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .brand-logo-reveal {
+    transition: grid-template-columns 420ms var(--ease-out);
+  }
+
+  .brand-logo-mark {
+    transition:
+      opacity 180ms var(--ease-out),
+      transform 320ms var(--ease-out),
+      filter 180ms var(--ease-out);
+  }
+
+  /* 전환 시간과 지연은 바뀐 뒤의 값을 쓴다. 그래서 펼칠 때는 글자가 앞에서부터 차례로 떠오르고, 접을 때는 한꺼번에 빨리 사라진다 */
+  .brand-logo-letter {
+    transition-property: opacity, transform, filter;
+    transition-timing-function: var(--ease-out);
+    transition-duration: calc(160ms + var(--brand-logo-open) * 260ms);
+    transition-delay: calc(
+      var(--brand-logo-open) * (80ms + var(--letter-index) * 28ms)
+    );
+  }
+}
+
 /* 프로젝트 색은 바탕에 따라 밝기가 다르다. 쓰는 쪽에서 두 값을 넘기면 여기서 테마에 맞는 것을 고른다.
    :root에서 고르면 안 된다. 그 자리에는 아직 프로젝트별 값이 없어 빈 값으로 굳는다 */
 [data-project-accent] {
@@ -140,6 +209,71 @@ body {
 /* Tailwind 4는 버튼의 커서를 브라우저 기본값(화살표)으로 둔다. 누를 수 있는 자리는 손가락으로 보이게 되돌린다 */
 button:not(:disabled) {
   cursor: pointer;
+}
+
+/* 끌어 넘길 수 있는 자리에서만 손을 편다. 글자 위에서는 규칙이 붙지 않아 I빔이 남고, 그게 곧 "여기는 긁는 자리"라는 안내가 된다.
+   자손까지 함께 바꾸는 것은 커서가 상속되기 때문이다. 글자 요소가 저마다 auto로 되돌려 버리면 손 모양이 나오지 않는다 */
+[data-drag-ready="true"],
+[data-drag-ready="true"] * {
+  cursor: grab;
+}
+
+/* 누르면 어디론가 가는 자리는 끄는 자리가 아니다. 위 규칙이 자손을 전부 덮으므로 여기서 되돌린다.
+   링크 안의 아이콘까지 짚는 이유는 포인터가 실제로 얹히는 것이 링크가 아니라 그 안의 svg이기 때문이다 */
+[data-drag-ready="true"] :is(a[href], button:not(:disabled)),
+[data-drag-ready="true"] :is(a[href], button:not(:disabled)) * {
+  cursor: pointer;
+}
+
+/* 끄는 동안에는 포인터가 목록 밖으로 나가도 쥔 손을 유지한다.
+   버튼의 cursor: pointer처럼 자기 커서를 가진 요소를 덮어야 해서 important를 쓴다 */
+body[data-dragging-carousel],
+body[data-dragging-carousel] * {
+  cursor: grabbing !important;
+}
+
+/* 목록의 제목이 상세 페이지의 제목 자리로 옮겨 가며 커진다 */
+::view-transition-group(*) {
+  animation-duration: 260ms;
+  animation-timing-function: var(--ease-out);
+}
+
+/* 바탕은 제목보다 먼저 끝낸다. 전환 동안 겹쳐 보이는 옛 화면은 멈춘 그림이라 오래 두면 끊긴 것으로 읽힌다.
+   3D 장면은 레이아웃에 살아 있어 돌아오자마자 움직이므로, 그 살아 있는 화면을 일찍 내준다 */
+::view-transition-group(root),
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 160ms;
+}
+
+/* 옮겨 가는 도중 글자가 늘어나는 것이 그대로 보이면 지저분하다. 가운데에서 살짝 흐려 그 자국을 덮는다 */
+::view-transition-image-pair(*) {
+  animation-name: title-blur;
+}
+
+/* 바탕까지 흐리면 화면만 한 필터가 매 프레임 돌아간다. 제목 몇 글자를 덮자고 치를 값이 아니다 */
+::view-transition-image-pair(root) {
+  animation-name: none;
+}
+
+@keyframes title-blur {
+  35% {
+    filter: blur(2px);
+  }
+}
+
+/* 전환 덮개가 화면을 가려 그동안 누른 것이 사라진다 */
+::view-transition {
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
 }
 
 :focus-visible {

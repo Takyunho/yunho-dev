@@ -20,12 +20,13 @@ export default function ContactSection() {
       className="flex min-h-svh flex-col justify-between px-5 pt-32 md:px-10"
     >
       <div>
-        <h2
-          data-reveal
-          className="display text-[clamp(3.75rem,13vw,12rem)] leading-[0.92] text-fg"
-        >
-          Let&apos;s talk
-        </h2>
+        {/* 마지막 섹션이라 제목을 히어로와 같은 크기로 두므로 SectionHeading 대신 같은 구성을 직접 쓴다 */}
+        <div data-reveal>
+          <h2 className="display text-[clamp(3.75rem,13vw,12rem)] leading-[0.92] text-fg">
+            Contact
+          </h2>
+          <p className="mt-3 text-base text-muted">연락처</p>
+        </div>
 
         <p
           data-reveal
