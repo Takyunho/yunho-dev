@@ -4,9 +4,11 @@ import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
 import {
+  MOTION_KEY,
   PART_DEFINITIONS,
   THEME_ONLY_KEY,
   type PartMaterials,
+  type PartMotion,
 } from "@/components/scene/partDefinitions";
 import {
   computeViewportUnits,
@@ -71,6 +73,16 @@ export default function UiParts({
   const laneRoute = useMemo(() => createLaneRoute(), []);
   const lastAtmosphereOpacity = useRef("");
   const materialList = useMemo(() => Object.values(materials), [materials]);
+  const partMotions = useMemo(
+    () =>
+      parts.groups.flatMap((group) =>
+        group.children.flatMap((child) => {
+          const motion = child.userData[MOTION_KEY] as PartMotion | undefined;
+          return motion ? [motion] : [];
+        }),
+      ),
+    [parts],
+  );
 
   // 부품 메시는 코드로 만들어져 JSX prop으로 그림자를 켤 수 없어서 여기서 직접 켠다
   useEffect(() => {
@@ -242,6 +254,11 @@ export default function UiParts({
       group.updateMatrixWorld(true);
       parts.matrices[partIndex].copy(group.matrixWorld);
     });
+
+    // 동작 줄이기 설정에서는 0초 자세로 멈춰 둔다. 부품이 보이지 않을 때는 움직일 이유가 없다
+    if (!isFrozen && currentPhases.solid > 0.001) {
+      partMotions.forEach((motion) => motion(elapsedTime));
+    }
 
     // 굳어지는 순간에만 빛이 돌았다가 사라진다
     const glowPulse = Math.sin(currentPhases.solid * Math.PI) * 0.55;

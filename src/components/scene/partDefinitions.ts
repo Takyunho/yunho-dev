@@ -27,6 +27,26 @@ type Vector3Tuple = [number, number, number];
 export const THEME_ONLY_KEY = "themeOnly";
 export type ThemeOnly = "light" | "dark";
 
+// 스스로 움직이는 메시에 붙이는 표식. 값은 경과 시간(초)을 받아 그 메시의 자세를 바꾸는 함수이고 UiParts가 매 프레임 부른다.
+// 입자는 처음 한 번 뽑은 표면 자리로 내려앉으므로 이런 메시에는 내려앉지 않는다. 0초의 자세가 동작 줄이기 설정에서 멈춰 있는 모습이다
+export const MOTION_KEY = "motion";
+export type PartMotion = (elapsedTime: number) => void;
+
+function setMotion(mesh: THREE.Mesh, motion: PartMotion) {
+  mesh.userData[MOTION_KEY] = motion;
+  motion(0);
+}
+
+// 퍼지는 고리. 박자마다 제 크기에서 커지다가 끝 무렵 사라지고 다시 시작한다.
+// 재질을 모든 부품이 나눠 써서 고리만 흐리게 할 수 없으므로 크기와 보이기로만 나타낸다
+function setPulse(mesh: THREE.Mesh, beatsPerSecond: number, growth: number) {
+  setMotion(mesh, (elapsedTime) => {
+    const beat = (elapsedTime * beatsPerSecond) % 1;
+    mesh.scale.setScalar(1 + beat * growth);
+    mesh.visible = beat < 0.75;
+  });
+}
+
 // 입자는 부품 그룹의 바로 아래 메시에만 내려앉는다. 메시를 하위 그룹에 넣으면 그 그룹의 변환이 빠진 자리로 날아간다
 function addMesh(
   group: THREE.Group,
@@ -94,7 +114,7 @@ function addMerged(
   return addMesh(group, merged, material);
 }
 
-// 실시간 파형. 센서 값이 흐르는 선이 점선 기준선을 한 번 넘고, 넘은 자리에 표시가 박혀 있다
+// 실시간 파형. 센서 값이 흐르는 선이 점선 기준선을 한 번 넘고, 넘은 자리에서 고리가 퍼진다
 function createLiveWaveform(materials: PartMaterials): THREE.Group {
   const group = new THREE.Group();
   addMesh(group, roundedBox(3.0, 1.8, 0.22, 0.16, 5), materials.neutral);
@@ -151,25 +171,28 @@ function createLiveWaveform(materials: PartMaterials): THREE.Group {
     materials.highlight,
     peak,
   );
-  addMesh(
+  const peakRing = addMesh(
     group,
     new THREE.TorusGeometry(0.17, 0.016, 10, 48),
     materials.highlight,
     peak,
   );
+  setPulse(peakRing, 0.8, 0.9);
   return group;
 }
 
 const GRAPH_NODE_WIDTH = 0.78;
 const GRAPH_NODE_HEIGHT = 0.6;
 const GRAPH_PORT_RADIUS = 0.065;
+// 신호가 첫 노드에서 마지막 노드까지 한 번 가는 데 약 3초가 걸린다
+const SIGNAL_LAPS_PER_SECOND = 0.32;
 const GRAPH_NODES: { x: number; y: number }[] = [
   { x: -1.08, y: 0.4 },
   { x: 0, y: -0.4 },
   { x: 1.08, y: 0.4 },
 ];
 
-// 시나리오 그래프. 노드 세 개를 곡선이 잇고, 두 번째 선 위에 신호 하나가 지나가고 있다.
+// 시나리오 그래프. 노드 세 개를 곡선이 잇고, 신호 하나가 선을 따라 흐른다.
 // 첫 노드의 머리는 강조색으로 시작점임을, 마지막 노드의 출력 단자는 라임으로 결과가 나가는 자리임을 알린다
 function createScenarioGraph(materials: PartMaterials): THREE.Group {
   const group = new THREE.Group();
@@ -254,12 +277,19 @@ function createScenarioGraph(materials: PartMaterials): THREE.Group {
     materials.highlight,
     [lastNode.x + portOffset, lastNode.y, 0.02],
   );
-  const signal = edgeCurves[1].getPoint(0.5);
-  addMesh(group, new THREE.SphereGeometry(0.055, 20, 20), materials.highlight, [
-    signal.x,
-    signal.y,
-    signal.z + 0.04,
-  ]);
+  const signal = addMesh(
+    group,
+    new THREE.SphereGeometry(0.055, 20, 20),
+    materials.highlight,
+  );
+  // 두 선을 차례로 지난다. 0초에는 두 번째 선의 가운데라서 멈춘 화면에서도 선 위에 신호가 보인다
+  const signalPoint = new THREE.Vector3();
+  setMotion(signal, (elapsedTime) => {
+    const progress = (elapsedTime * SIGNAL_LAPS_PER_SECOND + 0.75) % 1;
+    const edgeIndex = progress < 0.5 ? 0 : 1;
+    edgeCurves[edgeIndex].getPointAt((progress - edgeIndex * 0.5) * 2, signalPoint);
+    signal.position.set(signalPoint.x, signalPoint.y, signalPoint.z + 0.04);
+  });
   return group;
 }
 
@@ -466,7 +496,7 @@ const SITE_PINS: [number, number][] = [
   [0.64, -0.38],
 ];
 
-// 현장 도면. 벽으로 나뉜 평면에 센서 핀이 꽂혀 있고, 그중 하나만 켜져 발밑에 고리가 둘러 있다.
+// 현장 도면. 벽으로 나뉜 평면에 센서 핀이 꽂혀 있고, 그중 하나만 켜져 발밑에서 고리가 퍼진다.
 // 바닥에 누운 부품이라 정의의 회전에서 앞으로 기울여 윗면이 보이게 한다
 function createSitePlan(materials: PartMaterials): THREE.Group {
   const group = new THREE.Group();
@@ -513,13 +543,14 @@ function createSitePlan(materials: PartMaterials): THREE.Group {
     alertZ,
   ]);
   // 고리는 기본으로 화면을 보고 서 있어서 바닥에 눕힌다
-  addMesh(
+  const ripple = addMesh(
     group,
     new THREE.TorusGeometry(0.2, 0.016, 8, 48),
     materials.highlight,
     [alertX, floorTop + 0.02, alertZ],
     [Math.PI / 2, 0, 0],
   );
+  setPulse(ripple, 0.6, 1.6);
   return group;
 }
 
