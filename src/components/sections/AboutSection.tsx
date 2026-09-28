@@ -38,27 +38,34 @@ export default function AboutSection() {
             3D 부품이 이 글자 옆을 지나가므로 섹션이 길어지면 겹친다. 내용을 더할 때는 높이를 확인할 것 */}
         <div data-reveal className="mt-12 border-t border-line pt-6">
           <h3 className="text-2xl font-semibold text-fg">{CAREER.company}</h3>
-          <p className="label mt-1 font-mono tabular-nums">
-            {CAREER.period} · {CAREER.role}
+          <p className="label mt-1 flex flex-wrap items-center gap-x-3">
+            <span className="font-mono tabular-nums">{CAREER.period}</span>
+            <span aria-hidden="true" className="h-3 w-px bg-line" />
+            <span>{CAREER.role}</span>
           </p>
           <p className="mt-3 max-w-(--measure) text-(length:--text-body) leading-relaxed text-muted">
             {CAREER.companyDescription}
           </p>
 
-          {/* 세로선이 시기를 하나로 꿰어 준다. 최근이 위에 온다 */}
-          <ol className="mt-7 space-y-7 border-l border-line pl-5">
+          {/* 세로선이 시기를 하나로 꿰고, 선 위의 점이 시기가 시작하는 자리를 짚는다. 최근이 위에 온다.
+              점은 기간 글자의 가운데 높이에 맞추고, 가로로는 pl-5와 선 두께의 절반만큼 당겨 선 한가운데에 둔다 */}
+          <ol className="mt-8 space-y-10 border-l border-line pl-5">
             {CAREER.phases.map((phase) => (
-              <li key={phase.title}>
+              <li
+                key={phase.title}
+                className="relative before:absolute before:top-[5px] before:-left-[25px] before:size-[9px] before:rounded-full before:bg-accent"
+              >
                 <p className="label font-mono tabular-nums">{phase.period}</p>
-                <h4 className="mt-1 text-xl font-semibold text-fg">
+                <h4 className="mt-1 text-[1.375rem] leading-snug font-semibold text-fg">
                   {phase.title}
                 </h4>
-                {/* 이름 붙은 묶음은 점 두 겹이 겹쳐 보이므로, 이름은 점 없이 굵게만 두고 항목에만 점을 찍는다 */}
-                <div className="mt-2 space-y-3">
+                {/* 이름 붙은 묶음은 점 두 겹이 겹쳐 보이므로, 이름은 점 없이 두고 항목에만 점을 찍는다.
+                    이름이 항목과 같은 크기라 색으로 구분하고, 묶음 사이를 항목 사이보다 넓게 띄워 어디서 나뉘는지 보이게 한다 */}
+                <div className="mt-3 space-y-5">
                   {phase.groups.map((group) => (
                     <div key={group.label ?? group.items[0]}>
                       {group.label && (
-                        <p className="text-(length:--text-body) font-semibold text-fg">
+                        <p className="text-(length:--text-body) font-semibold text-accent">
                           {group.label}
                         </p>
                       )}

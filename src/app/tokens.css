@@ -9,7 +9,7 @@
   --surface: oklch(99% 0.003 255);
   --fg: oklch(19% 0.012 255);
   --muted: oklch(40% 0.014 255);
-  --line: oklch(84% 0.008 255);
+  --line: oklch(80% 0.008 255);
   --accent: oklch(47% 0.2 262);
   --accent-ink: oklch(98% 0.005 255);
   --focus: oklch(47% 0.2 262);
@@ -44,8 +44,9 @@
   --bg: oklch(14% 0.012 255);
   --surface: oklch(18% 0.014 255);
   --fg: oklch(94% 0.006 255);
-  --muted: oklch(76% 0.012 255);
-  --line: oklch(32% 0.014 255);
+  /* 어두운 바탕에서 본문 대부분이 이 색이라 오래 읽어도 흐려 보이지 않을 만큼 올린다. 구분선은 경력 세로선처럼 구조를 잡는 선이 보이는 밝기다 */
+  --muted: oklch(80% 0.012 255);
+  --line: oklch(38% 0.014 255);
   --accent: oklch(70% 0.14 255);
   --accent-ink: oklch(14% 0.012 255);
   --focus: oklch(76% 0.14 255);

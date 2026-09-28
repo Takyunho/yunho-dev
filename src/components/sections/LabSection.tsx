@@ -29,7 +29,7 @@ export default function LabSection() {
               <span className="text-xl font-medium tracking-tight text-fg transition-colors group-hover:text-accent md:text-2xl">
                 {labItem.name}
               </span>
-              <span className="order-3 col-span-2 text-sm leading-relaxed text-muted md:order-none md:col-span-1 md:text-base">
+              <span className="order-3 col-span-2 text-base leading-relaxed text-muted md:order-none md:col-span-1">
                 {labItem.description}
               </span>
               <span className="hidden font-mono text-(length:--text-label) text-muted md:block">
