@@ -27,6 +27,7 @@ import {
   createLaneRoute,
   createScenePhases,
   samplePhases,
+  sampleSpreadPastAbout,
   type ClumpCenter,
 } from "@/components/scene/sectionChoreography";
 import type { ThemeName } from "@/components/scene/themePalette";
@@ -50,10 +51,10 @@ const LEAN_FOLLOW_SPEED = 6;
 // Lab과 Contact 사이 빈 줄은 섹션 여백 두 개 높이라서, 가장 큰 부품이 들어가도록 건너가는 동안 이만큼 줄인다
 const LANE_CROSS_SHRINK = 0.3;
 const EMPTY_GAP = { top: 0, bottom: 0, band: 0 };
-// 휴대폰에서 흩어지는 부품이 화면 밖 길로 빠지는 빠르기. 흩어짐의 앞뒤 약 10%만 화면 안을 지난다
-const MOBILE_DETOUR_SHARPNESS = 3;
+// 흩어지는 부품이 화면 밖 길로 빠지는 빠르기. 흩어짐의 앞뒤 약 10%만 화면 안을 지난다
+const DETOUR_SHARPNESS = 3;
 // 화면 밖 길에서 부품 안쪽 끝과 화면 끝 사이 간격 (장면 단위)
-const MOBILE_DETOUR_MARGIN = 0.3;
+const DETOUR_MARGIN = 0.3;
 
 export default function UiParts({
   parts,
@@ -147,6 +148,12 @@ export default function UiParts({
       viewport.halfHeight -
       (sceneState.layout.contactTopPixels - scrollY) / viewport.pixelsPerUnit;
     computeLaneRoute(currentPhases.regather, laneRoute);
+    const spreadPastAbout = sampleSpreadPastAbout(
+      sceneState.sectionProgress,
+      sceneState.aboutExitProgress,
+      profile,
+      currentPhases.regather,
+    );
     const elapsedTime = state.clock.elapsedTime;
     const cursorX = sceneState.pointer.x * viewport.halfWidth;
     const cursorY = sceneState.pointer.y * viewport.halfHeight;
@@ -182,7 +189,11 @@ export default function UiParts({
         );
       }
 
-      const spread = currentPhases.spread;
+      const isLeftPart = definition.side[0] < 0;
+      const spread =
+        sideLayout && isLeftPart && !isFrozen
+          ? spreadPastAbout
+          : currentPhases.spread;
       let baseX: number;
       let baseY: number;
       let baseZ: number;
@@ -208,24 +219,32 @@ export default function UiParts({
         baseX = clumpX + (placement.x - clumpX) * spread;
         baseY = clumpY + (placement.y - clumpY) * spread;
         baseZ = clumpZ + (placement.z - clumpZ) * spread;
+        // 출발하자마자 화면 밖 길로 빠졌다가 도착 직전에 제자리로 들어온다.
+        // 앞으로 나온 부품은 원근 때문에 바깥으로 더 크게 보이므로, 그 깊이에서 화면 끝이 되는 값을 기준으로 삼는다
+        const detour = Math.min(
+          1,
+          Math.sin(spread * Math.PI) * DETOUR_SHARPNESS,
+        );
+        const depthRatio = (CAMERA_DISTANCE - baseZ) / CAMERA_DISTANCE;
+        const spreadScale =
+          clumpScale * (1 + (placement.fitScale - 1) * spread);
         if (isMobile) {
-          // 휴대폰은 문구가 화면 폭을 다 써서 화면 안을 지나면 어디서든 글자를 가린다. 출발하자마자 옆으로 빠져
-          // 화면 밖 길로 옮겨 가고, 도착 직전에 문구 사이 빈 줄로 들어온다.
-          // 앞으로 나온 부품은 원근 때문에 바깥으로 더 크게 보이므로, 그 깊이에서 화면 끝이 되는 x를 기준으로 삼는다
-          const partHalfWidth =
-            definition.halfWidth *
-            clumpScale *
-            (1 + (placement.fitScale - 1) * spread);
-          const screenEdgeX =
-            (viewport.halfWidth * (CAMERA_DISTANCE - baseZ)) / CAMERA_DISTANCE;
+          // 휴대폰은 문구가 화면 폭을 다 써서 화면 안을 지나면 어디서든 글자를 가린다. 옆으로 빠져 문구 사이 빈 줄로 들어온다
           const detourX =
             definition.side[0] *
-            (screenEdgeX + partHalfWidth + MOBILE_DETOUR_MARGIN);
-          const detour = Math.min(
-            1,
-            Math.sin(spread * Math.PI) * MOBILE_DETOUR_SHARPNESS,
-          );
+            (viewport.halfWidth * depthRatio +
+              definition.halfWidth * spreadScale +
+              DETOUR_MARGIN);
           baseX += (detourX - baseX) * detour;
+        } else if (isLeftPart) {
+          // 왼쪽 부품은 About 문구 오른쪽의 덩어리에서 문구 쪽으로 건너간다. 곧장 가면 화면 왼쪽에 붙은 About 문구를
+          // 가로지르므로, 도착할 자리 쪽의 화면 위나 아래 밖으로 돌아서 건너간다
+          const detourY =
+            (placement.y >= clumpY ? 1 : -1) *
+            (viewport.halfHeight * depthRatio +
+              (parts.heights[partIndex] * spreadScale) / 2 +
+              DETOUR_MARGIN);
+          baseY += (detourY - baseY) * detour;
         }
       }
       const scale =

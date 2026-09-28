@@ -161,6 +161,21 @@ export function samplePhases(
   return output;
 }
 
+// 옆 배치의 왼쪽 부품이 흩어진 정도. 부품이 머무는 왼쪽 여백은 Stack 본문 기준이라 화면 왼쪽에 붙은 About 문구와 겹친다.
+// About이 길면 다른 부품이 흩어지는 동안에도 문구가 화면에 남아 있으므로, 문구가 화면 위로 다 올라간 뒤에 내려앉게 늦춘다
+export function sampleSpreadPastAbout(
+  sectionProgress: number,
+  aboutExitProgress: number,
+  profile: SceneProfile,
+  regather: number,
+): number {
+  const [start, end] = STOPS_BY_PROFILE[profile].spread;
+  return (
+    smooth(range(sectionProgress, [start, Math.max(end, aboutExitProgress)])) *
+    (1 - regather)
+  );
+}
+
 export interface LaneRoute {
   // 자리에서 Lab과 Contact 사이 빈 줄로 내려오는 정도
   descend: number;
