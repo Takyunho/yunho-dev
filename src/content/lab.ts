@@ -14,7 +14,7 @@ const GITHUB_BASE_URL = "https://github.com/Takyunho";
 export const LAB_ITEMS: LabItem[] = [
   {
     name: "yunho-dev",
-    description: "지금 보고 있는 3D 인터랙티브 포트폴리오",
+    description: "지금 보고 계신 3D 인터랙티브 포트폴리오입니다.",
     language: "TypeScript",
     year: "2026",
     url: `${GITHUB_BASE_URL}/yunho-dev`,
@@ -22,7 +22,7 @@ export const LAB_ITEMS: LabItem[] = [
   {
     name: "i18n",
     description:
-      "번역 키를 코드에서 자동으로 뽑아내는 실험. 이 방식을 다듬어 실제 제품의 다국어 작업에 적용했다",
+      "코드에서 번역 키를 자동으로 뽑아내는 프로토타입입니다. 이 방식을 다듬어 실제 제품의 다국어 작업에 적용했습니다.",
     language: "JavaScript",
     year: "2025",
     url: `${GITHUB_BASE_URL}/i18n`,
@@ -30,14 +30,14 @@ export const LAB_ITEMS: LabItem[] = [
   {
     name: "React-Flow",
     description:
-      "노드 기반 UI를 처음 만져 본 저장소. 이후 제품의 시나리오 에디터로 이어졌다",
+      "노드 기반 UI를 처음 다뤄 본 저장소입니다. 여기서 익힌 내용을 제품의 시나리오 에디터 개발에 활용했습니다.",
     language: "JavaScript",
     year: "2023",
     url: `${GITHUB_BASE_URL}/React-Flow`,
   },
   {
     name: "ARAndVR",
-    description: "웹에서 AR과 VR을 어디까지 할 수 있는지 살펴본 예제 모음",
+    description: "웹에서 AR과 VR을 어디까지 구현할 수 있는지 살펴본 예제 모음입니다.",
     language: "JavaScript",
     year: "2022",
     url: `${GITHUB_BASE_URL}/ARAndVR`,
