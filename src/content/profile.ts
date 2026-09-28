@@ -20,7 +20,8 @@ export const PROFILE: Profile = {
   company: "IDB",
   location: "Namyangju, Korea",
   careerSince: "2022",
-  tagline: "산업 현장의 데이터를 읽기 쉬운 화면으로 만듭니다.",
+  // "읽기 쉬운"은 한 덩어리라 줄바꿈하지 않는 공백으로 잇는다. 좁은 화면에서 두 줄로 나뉠 때 "읽기 / 쉬운"으로 끊기지 않는다
+  tagline: "산업 현장의 데이터를 읽기\u00A0쉬운 화면으로 만듭니다.",
   introduction:
     "산업 안전 모니터링 플랫폼의 첫 버전부터 성장을 이끌어온 5년 차 프론트엔드 개발자입니다.",
   email: "tyh1819@gmail.com",

@@ -51,13 +51,15 @@ export default function HeroSection() {
           ))}
         </h1>
 
-        <div className="max-w-xs md:pb-3 md:text-right">
+        {/* 소개 문구는 제목과 나란히 놓여도 자리가 넉넉한 1024px부터 한 줄로 둔다. 그보다 좁으면 제목이 밀려
+            단어 중간에서 끊기므로 폭을 묶어 두고, 두 줄의 길이를 맞춰 한 단어만 떨어지지 않게 한다 */}
+        <div className="max-w-xs md:pb-3 md:text-right lg:max-w-none">
           <p data-hero-fade className="label">
             {PROFILE.nameKorean} · {PROFILE.nameEnglish}
           </p>
           <p
             data-hero-fade
-            className="mt-3 text-lg leading-snug font-medium text-fg md:text-xl"
+            className="mt-3 text-lg leading-snug font-medium text-balance text-fg md:text-xl lg:whitespace-nowrap"
           >
             {PROFILE.tagline}
           </p>
