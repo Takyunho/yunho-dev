@@ -84,7 +84,7 @@ export default function UiParts({
     });
   }, [parts, castShadows]);
 
-  // 테마 토글의 해와 달처럼 한쪽 테마에서만 보이는 메시를 바꿔 보인다
+  // 한쪽 테마에서만 보이는 메시를 테마에 맞춰 바꿔 보인다
   useEffect(() => {
     parts.groups.forEach((group) => {
       group.children.forEach((child) => {
