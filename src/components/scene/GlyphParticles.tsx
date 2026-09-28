@@ -18,7 +18,11 @@ import {
   STREAM_DEPTH_NEAR,
   STREAM_HALF_WIDTH,
 } from "@/components/scene/glyphShaders";
-import { PART_COUNT, THEME_ONLY_KEY } from "@/components/scene/partDefinitions";
+import {
+  MOTION_KEY,
+  PART_COUNT,
+  THEME_ONLY_KEY,
+} from "@/components/scene/partDefinitions";
 import {
   FIELD_OF_VIEW,
   computeViewportUnits,
@@ -123,8 +127,13 @@ function sampleSurfaceTargets(
     [];
   groups.forEach((group, partIndex) => {
     group.children.forEach((child) => {
-      // 한쪽 테마에서만 보이는 메시는 뺀다. 입자가 보이지 않는 표면에 내려앉으면 안 된다
-      if (child instanceof THREE.Mesh && !child.userData[THEME_ONLY_KEY]) {
+      // 한쪽 테마에서만 보이는 메시와 스스로 움직이는 메시는 뺀다. 입자는 처음 뽑은 자리에 머물러서
+      // 보이지 않는 표면이나 이미 떠난 자리에 내려앉게 된다
+      if (
+        child instanceof THREE.Mesh &&
+        !child.userData[THEME_ONLY_KEY] &&
+        !child.userData[MOTION_KEY]
+      ) {
         child.updateMatrix();
         meshEntries.push({
           mesh: child,

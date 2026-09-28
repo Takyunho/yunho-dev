@@ -14,7 +14,10 @@
   --font-sans:
     var(--font-geist-sans), "Pretendard Variable", Pretendard, system-ui,
     sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  /* Geist Mono에는 한글이 없다. 뒤에 고정폭 글꼴만 두면 "현재" 같은 글자가 시스템 고정폭 한글로 떨어져 자간이 벌어지므로 본문 한글 글꼴을 먼저 잇는다 */
+  --font-mono:
+    var(--font-geist-mono), "Pretendard Variable", Pretendard, ui-monospace,
+    monospace;
 }
 
 /* Lenis smooth scroll */

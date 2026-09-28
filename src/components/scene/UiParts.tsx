@@ -4,11 +4,14 @@ import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
 import {
+  MOTION_KEY,
   PART_DEFINITIONS,
   THEME_ONLY_KEY,
   type PartMaterials,
+  type PartMotion,
 } from "@/components/scene/partDefinitions";
 import {
+  CAMERA_DISTANCE,
   computeViewportUnits,
   createPartPlacement,
   createViewportUnits,
@@ -47,6 +50,10 @@ const LEAN_FOLLOW_SPEED = 6;
 // Lab과 Contact 사이 빈 줄은 섹션 여백 두 개 높이라서, 가장 큰 부품이 들어가도록 건너가는 동안 이만큼 줄인다
 const LANE_CROSS_SHRINK = 0.3;
 const EMPTY_GAP = { top: 0, bottom: 0, band: 0 };
+// 휴대폰에서 흩어지는 부품이 화면 밖 길로 빠지는 빠르기. 흩어짐의 앞뒤 약 10%만 화면 안을 지난다
+const MOBILE_DETOUR_SHARPNESS = 3;
+// 화면 밖 길에서 부품 안쪽 끝과 화면 끝 사이 간격 (장면 단위)
+const MOBILE_DETOUR_MARGIN = 0.3;
 
 export default function UiParts({
   parts,
@@ -71,6 +78,16 @@ export default function UiParts({
   const laneRoute = useMemo(() => createLaneRoute(), []);
   const lastAtmosphereOpacity = useRef("");
   const materialList = useMemo(() => Object.values(materials), [materials]);
+  const partMotions = useMemo(
+    () =>
+      parts.groups.flatMap((group) =>
+        group.children.flatMap((child) => {
+          const motion = child.userData[MOTION_KEY] as PartMotion | undefined;
+          return motion ? [motion] : [];
+        }),
+      ),
+    [parts],
+  );
 
   // 부품 메시는 코드로 만들어져 JSX prop으로 그림자를 켤 수 없어서 여기서 직접 켠다
   useEffect(() => {
@@ -84,7 +101,7 @@ export default function UiParts({
     });
   }, [parts, castShadows]);
 
-  // 테마 토글의 해와 달처럼 한쪽 테마에서만 보이는 메시를 바꿔 보인다
+  // 한쪽 테마에서만 보이는 메시를 테마에 맞춰 바꿔 보인다
   useEffect(() => {
     parts.groups.forEach((group) => {
       group.children.forEach((child) => {
@@ -188,16 +205,28 @@ export default function UiParts({
         baseY = belowScreenY + (clumpY - belowScreenY) * currentPhases.regather;
         baseZ = clumpZ;
       } else {
-        // 휴대폰은 문구를 가로질러 날아가지 않게 화면 옆으로 돌아 나갔다가 자리로 들어온다
-        const sidewaysArc = isMobile
-          ? definition.side[0] *
-            viewport.halfWidth *
-            1.3 *
-            Math.sin(spread * Math.PI)
-          : 0;
-        baseX = clumpX + (placement.x - clumpX) * spread + sidewaysArc;
+        baseX = clumpX + (placement.x - clumpX) * spread;
         baseY = clumpY + (placement.y - clumpY) * spread;
         baseZ = clumpZ + (placement.z - clumpZ) * spread;
+        if (isMobile) {
+          // 휴대폰은 문구가 화면 폭을 다 써서 화면 안을 지나면 어디서든 글자를 가린다. 출발하자마자 옆으로 빠져
+          // 화면 밖 길로 옮겨 가고, 도착 직전에 문구 사이 빈 줄로 들어온다.
+          // 앞으로 나온 부품은 원근 때문에 바깥으로 더 크게 보이므로, 그 깊이에서 화면 끝이 되는 x를 기준으로 삼는다
+          const partHalfWidth =
+            definition.halfWidth *
+            clumpScale *
+            (1 + (placement.fitScale - 1) * spread);
+          const screenEdgeX =
+            (viewport.halfWidth * (CAMERA_DISTANCE - baseZ)) / CAMERA_DISTANCE;
+          const detourX =
+            definition.side[0] *
+            (screenEdgeX + partHalfWidth + MOBILE_DETOUR_MARGIN);
+          const detour = Math.min(
+            1,
+            Math.sin(spread * Math.PI) * MOBILE_DETOUR_SHARPNESS,
+          );
+          baseX += (detourX - baseX) * detour;
+        }
       }
       const scale =
         clumpScale * (1 + (placement.fitScale - 1) * spread) * crossShrink;
@@ -242,6 +271,11 @@ export default function UiParts({
       group.updateMatrixWorld(true);
       parts.matrices[partIndex].copy(group.matrixWorld);
     });
+
+    // 동작 줄이기 설정에서는 0초 자세로 멈춰 둔다. 부품이 보이지 않을 때는 움직일 이유가 없다
+    if (!isFrozen && currentPhases.solid > 0.001) {
+      partMotions.forEach((motion) => motion(elapsedTime));
+    }
 
     // 굳어지는 순간에만 빛이 돌았다가 사라진다
     const glowPulse = Math.sin(currentPhases.solid * Math.PI) * 0.55;
