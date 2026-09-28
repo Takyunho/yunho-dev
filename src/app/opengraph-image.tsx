@@ -63,12 +63,15 @@ export default async function OpenGraphImage() {
         fontFamily: "Pretendard",
       }}
     >
+      {/* satori는 글자 칸의 최소 폭을 문구 한 줄 폭으로 잡아서, 줄어들 수 있게 두지 않으면 소개 문구가 한 줄로 뻗어 도형 칸을 밀어낸다 */}
       <div
         style={{
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
           flexGrow: 1,
+          flexBasis: 0,
+          minWidth: 0,
         }}
       >
         <div style={{ display: "flex", fontSize: 34 }}>
@@ -95,6 +98,8 @@ export default async function OpenGraphImage() {
               display: "flex",
               marginTop: 36,
               fontSize: 34,
+              // satori는 기본으로 한글을 글자 단위로 끊는다
+              wordBreak: "keep-all",
               color: BRAND_COLORS.muted,
             }}
           >
@@ -112,6 +117,7 @@ export default async function OpenGraphImage() {
           position: "relative",
           width: 470,
           height: 486,
+          flexShrink: 0,
         }}
       >
         {CLUSTER_SHAPES.map((clusterShape) => (
