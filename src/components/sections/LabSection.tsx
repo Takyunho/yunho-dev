@@ -20,27 +20,29 @@ export default function LabSection() {
       <ul data-scene-text className="border-b border-line">
         {LAB_ITEMS.map((labItem) => (
           <li key={labItem.name} data-reveal className="border-t border-line">
+            {/* 다섯 칸 배치는 설명 칸이 넉넉한 1024px부터 쓴다. 768px에서는 설명 칸이 65px 남짓이라
+                "프로토타입입니다."처럼 줄을 바꿀 수 없는 낱말이 칸을 밀어 화면 밖으로 넘친다 */}
             <a
               href={labItem.url}
               target="_blank"
               rel="noreferrer"
-              className="group grid grid-cols-[1fr_auto] items-baseline gap-x-6 gap-y-1 py-6 transition-colors md:grid-cols-[18rem_1fr_8rem_4rem_2rem]"
+              className="group grid grid-cols-[1fr_auto] items-baseline gap-x-6 gap-y-1 py-6 transition-colors lg:grid-cols-[18rem_1fr_8rem_4rem_2rem]"
             >
               <span className="text-xl font-medium tracking-tight text-fg transition-colors group-hover:text-accent md:text-2xl">
                 {labItem.name}
               </span>
-              <span className="order-3 col-span-2 text-base leading-relaxed text-muted md:order-none md:col-span-1">
+              <span className="order-3 col-span-2 text-base leading-relaxed text-muted lg:order-none lg:col-span-1">
                 {labItem.description}
               </span>
-              <span className="hidden font-mono text-(length:--text-label) text-muted md:block">
+              <span className="hidden font-mono text-(length:--text-label) text-muted lg:block">
                 {labItem.language}
               </span>
-              <span className="font-mono text-(length:--text-label) text-muted tabular-nums md:text-right">
+              <span className="font-mono text-(length:--text-label) text-muted tabular-nums lg:text-right">
                 {labItem.year}
               </span>
               <span
                 aria-hidden="true"
-                className="hidden text-right text-muted transition-transform group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-accent md:block"
+                className="hidden text-right text-muted transition-transform group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-accent lg:block"
               >
                 ↗
               </span>
