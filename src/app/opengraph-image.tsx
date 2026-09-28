@@ -3,6 +3,7 @@ import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import { PROFILE } from "@/content/profile";
 import { BRAND_COLORS } from "@/lib/brandMark";
+import { OgPartCluster } from "@/lib/ogPartCluster";
 
 export const alt = `${PROFILE.nameKorean} | ${PROFILE.role}`;
 export const size = { width: 1200, height: 630 };
@@ -14,38 +15,8 @@ const FONT_PATH = join(
   "node_modules/pretendard/dist/public/static/Pretendard-SemiBold.otf",
 );
 
-type ShapeTone = "light" | "dark" | "accent";
-
-interface ClusterShape {
-  tone: ShapeTone;
-  left: number;
-  top: number;
-  diameter: number;
-  // 0.5면 원, 그보다 작으면 둥근 사각형
-  roundness: number;
-}
-
-// 빛이 왼쪽 위에서 들어오는 것처럼 보이도록 밝은 점을 중심에서 벗어난 곳에 둔다
-const SHAPE_GRADIENTS: Record<ShapeTone, string> = {
-  light:
-    "radial-gradient(circle at 32% 28%, #ffffff 0%, #c9cdd8 45%, #7d8394 100%)",
-  dark: "radial-gradient(circle at 32% 28%, #5a5f70 0%, #1a1c24 38%, #050608 100%)",
-  accent:
-    "radial-gradient(circle at 32% 28%, #b3bbff 0%, #5b6cff 42%, #1e2aa8 100%)",
-};
-
-// 3D 장면의 오브젝트 덩어리를 평면 도형으로 옮긴 것. 뒤에 있는 도형부터 그린다
-const CLUSTER_SHAPES: ClusterShape[] = [
-  { tone: "dark", left: 150, top: 30, diameter: 190, roundness: 0.26 },
-  { tone: "accent", left: 20, top: 120, diameter: 170, roundness: 0.26 },
-  { tone: "light", left: 270, top: 150, diameter: 170, roundness: 0.5 },
-  { tone: "dark", left: 40, top: 270, diameter: 150, roundness: 0.5 },
-  { tone: "light", left: 130, top: 140, diameter: 210, roundness: 0.5 },
-  { tone: "accent", left: 260, top: 300, diameter: 140, roundness: 0.5 },
-  { tone: "dark", left: 160, top: 310, diameter: 170, roundness: 0.26 },
-  { tone: "light", left: 60, top: 60, diameter: 110, roundness: 0.5 },
-  { tone: "dark", left: 330, top: 90, diameter: 100, roundness: 0.5 },
-];
+const CLUSTER_WIDTH = 470;
+const CLUSTER_HEIGHT = 486;
 
 export default async function OpenGraphImage() {
   const fontData = await readFile(FONT_PATH);
@@ -63,12 +34,15 @@ export default async function OpenGraphImage() {
         fontFamily: "Pretendard",
       }}
     >
+      {/* satori는 글자 칸의 최소 폭을 문구 한 줄 폭으로 잡아서, 줄어들 수 있게 두지 않으면 소개 문구가 한 줄로 뻗어 도형 칸을 밀어낸다 */}
       <div
         style={{
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
           flexGrow: 1,
+          flexBasis: 0,
+          minWidth: 0,
         }}
       >
         <div style={{ display: "flex", fontSize: 34 }}>
@@ -95,6 +69,8 @@ export default async function OpenGraphImage() {
               display: "flex",
               marginTop: 36,
               fontSize: 34,
+              // satori는 기본으로 한글을 글자 단위로 끊는다
+              wordBreak: "keep-all",
               color: BRAND_COLORS.muted,
             }}
           >
@@ -109,25 +85,12 @@ export default async function OpenGraphImage() {
       <div
         style={{
           display: "flex",
-          position: "relative",
-          width: 470,
-          height: 486,
+          width: CLUSTER_WIDTH,
+          height: CLUSTER_HEIGHT,
+          flexShrink: 0,
         }}
       >
-        {CLUSTER_SHAPES.map((clusterShape) => (
-          <div
-            key={`${clusterShape.left}-${clusterShape.top}`}
-            style={{
-              position: "absolute",
-              left: clusterShape.left,
-              top: clusterShape.top,
-              width: clusterShape.diameter,
-              height: clusterShape.diameter,
-              borderRadius: clusterShape.diameter * clusterShape.roundness,
-              backgroundImage: SHAPE_GRADIENTS[clusterShape.tone],
-            }}
-          />
-        ))}
+        <OgPartCluster width={CLUSTER_WIDTH} height={CLUSTER_HEIGHT} />
       </div>
     </div>,
     {

@@ -1,11 +1,11 @@
 import type { ReactElement } from "react";
 
-// globals.css의 다크 테마 토큰과 같은 값이다. ImageResponse는 CSS 변수를 읽지 못해서 따로 둔다
+// tokens.css의 다크 테마 토큰과 같은 값이다. ImageResponse는 CSS 변수를 읽지 못해서 따로 둔다
 export const BRAND_COLORS = {
   background: "#0a0b0f",
   foreground: "#eceef3",
-  muted: "#8a90a2",
-  accent: "#5b6cff",
+  muted: "#b9bec6",
+  accent: "#5fa1f3",
 } as const;
 
 // 헤더 로고도 같은 마크를 그린다

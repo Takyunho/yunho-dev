@@ -62,7 +62,6 @@ function SceneContents({
       <UiParts
         parts={parts}
         materials={materials}
-        themeName={themeName}
         isMobile={isMobile}
         isFrozen={isFrozen}
         castShadows={castShadows}
