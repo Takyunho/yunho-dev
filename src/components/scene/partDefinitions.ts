@@ -23,10 +23,6 @@ export interface PartDefinition {
 
 type Vector3Tuple = [number, number, number];
 
-// 한쪽 테마에서만 보이는 메시에 붙이는 표식. UiParts가 테마에 맞춰 보이기를 바꾸고, 입자는 이런 메시에 내려앉지 않는다
-export const THEME_ONLY_KEY = "themeOnly";
-export type ThemeOnly = "light" | "dark";
-
 // 스스로 움직이는 메시에 붙이는 표식. 값은 경과 시간(초)을 받아 그 메시의 자세를 바꾸는 함수이고 UiParts가 매 프레임 부른다.
 // 입자는 처음 한 번 뽑은 표면 자리로 내려앉으므로 이런 메시에는 내려앉지 않는다. 0초의 자세가 동작 줄이기 설정에서 멈춰 있는 모습이다
 export const MOTION_KEY = "motion";

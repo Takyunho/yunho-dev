@@ -6,7 +6,6 @@ import { useFrame } from "@react-three/fiber";
 import {
   MOTION_KEY,
   PART_DEFINITIONS,
-  THEME_ONLY_KEY,
   type PartMaterials,
   type PartMotion,
 } from "@/components/scene/partDefinitions";
@@ -30,13 +29,11 @@ import {
   sampleSpreadPastAbout,
   type ClumpCenter,
 } from "@/components/scene/sectionChoreography";
-import type { ThemeName } from "@/components/scene/themePalette";
 import type { PartSet } from "@/components/scene/usePartGroups";
 
 interface UiPartsProps {
   parts: PartSet;
   materials: PartMaterials;
-  themeName: ThemeName;
   isMobile: boolean;
   isFrozen: boolean;
   castShadows: boolean;
@@ -59,7 +56,6 @@ const DETOUR_MARGIN = 0.3;
 export default function UiParts({
   parts,
   materials,
-  themeName,
   isMobile,
   isFrozen,
   castShadows,
@@ -110,16 +106,6 @@ export default function UiParts({
       });
     });
   }, [parts, castShadows, shadowDepthMaterial]);
-
-  // 한쪽 테마에서만 보이는 메시를 테마에 맞춰 바꿔 보인다
-  useEffect(() => {
-    parts.groups.forEach((group) => {
-      group.children.forEach((child) => {
-        const themeOnly = child.userData[THEME_ONLY_KEY];
-        if (themeOnly) child.visible = themeOnly === themeName;
-      });
-    });
-  }, [parts, themeName]);
 
   useFrame((state, delta) => {
     // 높이가 0이면 단위 환산이 0으로 나뉘어 NaN이 된다
