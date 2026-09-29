@@ -4,13 +4,27 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import ExternalLink from "@/components/layout/ExternalLink";
 import Header from "@/components/layout/Header";
-import { PROJECT_DETAILS } from "@/content/projectDetails";
+import {
+  PROJECT_DETAILS,
+  type ProjectCaseStudy,
+} from "@/content/projectDetails";
 import { PROJECTS, PROJECT_CATEGORIES } from "@/content/projects";
 import { titleTransitionName } from "@/lib/viewTransition";
 
 interface ProjectPageProps {
   params: Promise<{ id: string }>;
 }
+
+// 설계 사례의 네 칸을 읽는 순서대로 나열한다
+const CASE_STUDY_FIELDS: {
+  key: Exclude<keyof ProjectCaseStudy, "title">;
+  label: string;
+}[] = [
+  { key: "problem", label: "문제" },
+  { key: "decision", label: "결정" },
+  { key: "result", label: "결과" },
+  { key: "limitation", label: "한계" },
+];
 
 // 상세가 있는 프로젝트만 주소를 만든다. 나머지는 목록의 요약까지만 보여 준다
 export function generateStaticParams() {
@@ -144,6 +158,34 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         {/* 제목을 왼쪽 여백에 라벨처럼 두지 않고 본문 흐름 안에 둔다. 좁은 왼쪽 열에 갇히면
             제목과 본문의 폭이 달라져 읽는 줄이 매번 끊긴다 */}
         <div className="mt-20 border-b border-line">
+          {/* 설계 사례를 한 섹션으로 묶고, 사례마다 문제, 결정, 결과, 한계를 라벨과 본문으로 나눠 보여 준다 */}
+          {detail.caseStudies && detail.caseStudies.length > 0 && (
+            <section className="border-t border-line py-12 md:py-16">
+              <h2 className="text-xl font-semibold tracking-tight text-fg">
+                설계 사례
+              </h2>
+              <div className="mt-8 space-y-12">
+                {detail.caseStudies.map((caseStudy) => (
+                  <article key={caseStudy.title}>
+                    <h3 className="text-lg font-semibold tracking-tight text-fg">
+                      {caseStudy.title}
+                    </h3>
+                    <dl className="mt-4 max-w-(--measure) space-y-5">
+                      {CASE_STUDY_FIELDS.map((field) => (
+                        <div key={field.key}>
+                          <dt className="label">{field.label}</dt>
+                          <dd className="mt-1 text-(length:--text-body) leading-relaxed text-muted">
+                            {caseStudy[field.key]}
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </article>
+                ))}
+              </div>
+            </section>
+          )}
+
           {detail.sections.map((section) => (
             <section
               key={section.title}
