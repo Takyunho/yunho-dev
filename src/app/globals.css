@@ -20,6 +20,10 @@
     monospace;
 }
 
+html {
+  overflow-x: clip;
+}
+
 /* Lenis smooth scroll */
 html.lenis,
 html.lenis body {
