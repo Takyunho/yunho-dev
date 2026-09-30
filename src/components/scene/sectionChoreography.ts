@@ -42,7 +42,7 @@ interface PhaseStops {
   pool: Stop;
 }
 
-// 옆 배치는 부품이 여백에 있어서 Lab 목록이 아직 화면에 있을 때 Lab과 Contact 사이 빈 줄을 따라 건너갈 수 있다.
+// 옆 배치는 부품이 여백에 있어서 Side Projects 목록이 아직 화면에 있을 때 Side Projects와 Contact 사이 빈 줄을 따라 건너갈 수 있다.
 // 그래서 다시 뭉치기를 일찍 끝내고, 풀려서 고이는 구간을 길게 둔다
 // 모이기부터 입자가 사라지기까지는 About에 도착하는 진행도에 대한 비율이다. 헤더의 About을 누르면 섹션 위쪽이
 // 화면 위쪽에 맞춰지는데, 그 위치에서 부품이 다 굳어 있어야 한다
@@ -58,7 +58,7 @@ const SIDE_STOPS: PhaseStops = {
   pool: [4.74, 4.99],
 };
 
-// 문구 사이 배치는 부품이 Lab 목록 위쪽(화면 밖)에서 내려온다. 덩어리 자리가 화면에 들어오는 4.5부터 천천히 내려와
+// 문구 사이 배치는 부품이 Side Projects 목록 위쪽(화면 밖)에서 내려온다. 덩어리 자리가 화면에 들어오는 4.5부터 천천히 내려와
 // 다 모인 뒤에 풀리기 시작한다
 const STACKED_STOPS: PhaseStops = {
   ...SIDE_STOPS,
@@ -177,7 +177,7 @@ export function sampleSpreadPastAbout(
 }
 
 export interface LaneRoute {
-  // 자리에서 Lab과 Contact 사이 빈 줄로 내려오는 정도
+  // 자리에서 Side Projects와 Contact 사이 빈 줄로 내려오는 정도
   descend: number;
   // 빈 줄을 따라 덩어리 자리의 x까지 건너가는 정도
   traverse: number;
@@ -193,7 +193,7 @@ export function createLaneRoute(): LaneRoute {
   return { descend: 0, traverse: 0, settle: 0 };
 }
 
-// 옆 배치에서 다시 뭉칠 때의 경로. 곧장 가면 위쪽 부품이 Lab 목록을, 왼쪽 부품이 올라오는 Contact 제목을 가로지른다.
+// 옆 배치에서 다시 뭉칠 때의 경로. 곧장 가면 위쪽 부품이 Side Projects 목록을, 왼쪽 부품이 올라오는 Contact 제목을 가로지른다.
 // 그래서 먼저 목록과 제목 사이 빈 줄로 내려오고, 그 줄을 따라 옆으로 건너간 뒤, 덩어리 자리로 들어간다
 export function computeLaneRoute(
   regather: number,
@@ -211,7 +211,7 @@ export interface ClumpCenter {
   scale: number;
 }
 
-// Contact 덩어리를 섹션 위쪽에서 얼마나 아래에 두는지 (화면 높이 비율). 옆 배치는 Lab이 아직 화면에 있을 때 뭉치므로
+// Contact 덩어리를 섹션 위쪽에서 얼마나 아래에 두는지 (화면 높이 비율). 옆 배치는 Side Projects가 아직 화면에 있을 때 뭉치므로
 // 그때 화면에 들어와 있는 높은 자리에 두고, 나머지는 제목과 링크가 지나간 뒤에 뭉치므로 그 아래에 둔다
 const CONTACT_ANCHOR_RATIO: Record<SceneProfile, number> = {
   side: 0.32,

@@ -45,7 +45,7 @@ const LEAN_REACH_RATIO = 1.5;
 const LEAN_MAX_OFFSET = 0.5;
 const LEAN_MAX_TILT = (12 * Math.PI) / 180;
 const LEAN_FOLLOW_SPEED = 6;
-// Lab과 Contact 사이 빈 줄은 섹션 여백 두 개 높이라서, 가장 큰 부품이 들어가도록 건너가는 동안 이만큼 줄인다
+// Side Projects와 Contact 사이 빈 줄은 섹션 여백 두 개 높이라서, 가장 큰 부품이 들어가도록 건너가는 동안 이만큼 줄인다
 const LANE_CROSS_SHRINK = 0.3;
 const EMPTY_GAP = { top: 0, bottom: 0, band: 0 };
 // 흩어지는 부품이 화면 밖 길로 빠지는 빠르기. 흩어짐의 앞뒤 약 10%만 화면 안을 지난다
@@ -138,7 +138,7 @@ export default function UiParts({
     const contentMarginUnits =
       sceneState.layout.contentMarginPixels / viewport.pixelsPerUnit;
     const sideLayout = profile === "side";
-    // Lab 목록 아래 여백과 Contact 위 여백이 같아서 섹션 경계가 둘 사이 빈 줄의 가운데다
+    // Side Projects 목록 아래 여백과 Contact 위 여백이 같아서 섹션 경계가 둘 사이 빈 줄의 가운데다
     const laneY =
       viewport.halfHeight -
       (sceneState.layout.contactTopPixels - scrollY) / viewport.pixelsPerUnit;
@@ -203,7 +203,7 @@ export default function UiParts({
         crossShrink =
           1 - Math.sin(laneRoute.traverse * Math.PI) * LANE_CROSS_SHRINK;
       } else if (currentPhases.regather > 0) {
-        // 문구 사이 자리는 이때 화면 위쪽 밖이다. 거기서 내려오면 Lab 목록과 Contact 제목을 가로지르므로,
+        // 문구 사이 자리는 이때 화면 위쪽 밖이다. 거기서 내려오면 Side Projects 목록과 Contact 제목을 가로지르므로,
         // 화면 아래 밖에서 덩어리 자리로 올라온다. 덩어리 자리 아래에는 문구가 없다
         const belowScreenY =
           -viewport.halfHeight - parts.heights[partIndex] * clumpScale;

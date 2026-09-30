@@ -54,7 +54,7 @@ pnpm build
 | :------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------- |
 | `src/app/`                 | 레이아웃과 메타데이터, 페이지 조립, 프로젝트 상세 페이지(`work/[id]`), 테마 토큰이 있는 `tokens.css`와 `globals.css`, 코드로 생성하는 아이콘과 링크 미리보기 이미지, `robots`와 `sitemap` |
 | `src/content/`             | 화면에 표시되는 모든 콘텐츠 데이터                                                                                                      |
-| `src/components/sections/` | Hero, About, Stack, Work, Side Projects(`LabSection`), Contact 섹션과 프로젝트 카드                                                     |
+| `src/components/sections/` | Hero, About, Stack, Work, Side Projects, Contact 섹션과 프로젝트 카드                                                     |
 | `src/components/layout/`   | 헤더와 로고, 테마 토글, 부드러운 스크롤, 장면 상태 동기화, 안개 층                                                          |
 | `src/components/scene/`    | 3D 장면 (코드 글자 입자, 데이터 화면 부품, 배치 규칙, 수면 시뮬레이션, 조명, 연출 타임라인)                                             |
 | `src/hooks/`               | 미디어 쿼리, 동작 줄이기 감지, 스크롤 진입 애니메이션                                                                                   |
@@ -73,7 +73,7 @@ pnpm build
 | `stack.ts`    | 분류별 기술 스택                                                                                                                             |
 | `projects.ts` | Work 섹션의 프로젝트 목록과 분류                                                                                                             |
 | `projectDetails.ts` | 상세 페이지를 둔 프로젝트의 개요와 절별 내용                                                                                          |
-| `lab.ts`      | Side Projects 섹션의 저장소 목록                                                                                                             |
+| `sideProjects.ts` | Side Projects 섹션의 저장소 목록                                                                                                             |
 
 프로젝트를 추가할 때는 `PROJECT_SEEDS` 배열에 항목을 하나 더합니다. 배열은 최근에 시작한 순서이고, 고객사와 기관의 실명은 업종으로 바꿔 적습니다. 강조색은 순서대로 16색 팔레트에서 자동으로 붙어서 카드와 3D 부품의 강조색으로 쓰입니다.
 

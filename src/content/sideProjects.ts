@@ -1,4 +1,4 @@
-export interface LabItem {
+export interface SideProject {
   name: string;
   description: string;
   language: string;
@@ -8,16 +8,24 @@ export interface LabItem {
 
 const GITHUB_BASE_URL = "https://github.com/Takyunho";
 
-// 제품에 넣기 전에 따로 만들어 본 것들이다. 여기서 확인한 방식이 실제 업무로 이어진 경우도 있다.
-// 강의를 따라가거나 공부한 것을 모아 둔 저장소는 두지 않는다. 직접 만들어 보고 알아낸 것만 남긴다.
+// 직접 해 본 것들을 모은다. 여기서 확인한 방식이 실제 업무로 이어진 경우도 있다.
+// 강의를 따라가거나 공부한 것을 모아 둔 저장소는 두지 않는다.
 // 저장소를 열어 본 사람이 여기 적힌 한 줄보다 더 알 수 있어야 링크를 걸 값어치가 있다
-export const LAB_ITEMS: LabItem[] = [
+export const SIDE_PROJECTS: SideProject[] = [
   {
     name: "yunho-dev",
     description: "지금 보고 계신 3D 인터랙티브 포트폴리오입니다.",
     language: "TypeScript",
     year: "2026",
     url: `${GITHUB_BASE_URL}/yunho-dev`,
+  },
+  {
+    name: "Design-System-guide-page",
+    description:
+      "사내 디자인 시스템의 문서 사이트입니다. 빌드할 때 설치된 패키지의 CSS 변수를 읽어 토큰 문서를 만들기 때문에, 패키지를 올리면 문서도 함께 바뀝니다.",
+    language: "TypeScript",
+    year: "2026",
+    url: "https://github.com/idbrnd/Design-System-guide-page",
   },
   {
     name: "i18n",

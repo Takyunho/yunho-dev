@@ -51,7 +51,7 @@ export const sceneState = {
     aboutTextRightPixels: 0,
     gaps: [] as SceneTextGap[],
     // Contact 섹션의 문서 기준 위쪽 y. 다시 뭉치는 덩어리를 이 섹션에 고정하고, 옆 배치에서는 부품이 건너가는
-    // Lab과 Contact 사이 빈 줄의 위치로도 쓴다
+    // Side Projects와 Contact 사이 빈 줄의 위치로도 쓴다
     contactTopPixels: 0,
   },
 };
