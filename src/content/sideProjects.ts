@@ -1,4 +1,4 @@
-export interface LabItem {
+export interface SideProject {
   name: string;
   description: string;
   language: string;
@@ -11,7 +11,7 @@ const GITHUB_BASE_URL = "https://github.com/Takyunho";
 // 제품에 넣기 전에 따로 만들어 본 것들이다. 여기서 확인한 방식이 실제 업무로 이어진 경우도 있다.
 // 강의를 따라가거나 공부한 것을 모아 둔 저장소는 두지 않는다. 직접 만들어 보고 알아낸 것만 남긴다.
 // 저장소를 열어 본 사람이 여기 적힌 한 줄보다 더 알 수 있어야 링크를 걸 값어치가 있다
-export const LAB_ITEMS: LabItem[] = [
+export const SIDE_PROJECTS: SideProject[] = [
   {
     name: "yunho-dev",
     description: "지금 보고 계신 3D 인터랙티브 포트폴리오입니다.",

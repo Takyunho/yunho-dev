@@ -5,7 +5,7 @@ import SmoothScroll from "@/components/layout/SmoothScroll";
 import AboutSection from "@/components/sections/AboutSection";
 import ContactSection from "@/components/sections/ContactSection";
 import HeroSection from "@/components/sections/HeroSection";
-import LabSection from "@/components/sections/LabSection";
+import SideProjectsSection from "@/components/sections/SideProjectsSection";
 import StackSection from "@/components/sections/StackSection";
 import WorkSection from "@/components/sections/WorkSection";
 
@@ -22,7 +22,7 @@ export default function Home() {
         <AboutSection />
         <StackSection />
         <WorkSection />
-        <LabSection />
+        <SideProjectsSection />
         <ContactSection />
       </main>
     </div>
