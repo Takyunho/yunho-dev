@@ -550,7 +550,7 @@ function createSitePlan(materials: PartMaterials): THREE.Group {
   return group;
 }
 
-// 가장 작은 두 부품(토큰 팔레트, 현장 도면)을 가장 좁은 Work와 Lab 사이에 둔다
+// 가장 작은 두 부품(토큰 팔레트, 현장 도면)을 가장 좁은 Work와 Side Projects 사이에 둔다
 export const PART_DEFINITIONS: PartDefinition[] = [
   {
     key: "live-waveform",

@@ -4,7 +4,7 @@ export interface StackCategory {
   items: string[];
 }
 
-// 실제 제품에 써 본 것만 적는다. 학습만 한 것은 Lab 섹션에 둔다
+// 실제 제품에 써 본 것만 적는다. 학습만 한 것은 적지 않는다
 export const STACK_CATEGORIES: StackCategory[] = [
   {
     label: "Core",
